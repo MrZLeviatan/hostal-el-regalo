@@ -1,0 +1,1559 @@
+<!doctype html>
+<!--
+  /**
+   * Landing page de El Regalo · Hostal & Cafetería (Vereda Palestina, Salento, Quindío).
+   * Sitio informativo de una sola página: sin base de datos, sin login y sin reservas.
+   * Lleva al visitante a escribir por WhatsApp, Instagram, Facebook o teléfono y a ver
+   * la carta publicada por QR Regalo. Se muestra en 5 idiomas (ES, EN, FR, DE, PT) con
+   * detección automática del idioma del celular, igual que la carta por QR.
+   *
+   * Todo vive en este archivo (HTML + CSS + JS). Para personalizar:
+   *  1. Contacto, enlaces y carta → objeto CONFIG al inicio del <script>.
+   *  2. Colores → variables en :root (mismos de Catálogo El Regalo).
+   *  3. Textos → diccionario I18N en el <script> (un bloque por idioma).
+   *  4. Fotos → busca "REEMPLAZAR FOTO" y cambia cada URL de Unsplash por tu .webp.
+   **/
+-->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b7a57">
+
+  <!-- SEO básico (el JS lo traduce al cambiar de idioma). -->
+  <title>El Regalo · Hostal & Cafetería en Salento, Quindío</title>
+  <meta name="description" content="Hostal y cafetería entre cafetales en la Vereda Palestina, Salento (Quindío). Habitaciones privadas con baño, café de origen y vista a las montañas. Escríbenos por WhatsApp.">
+  <link rel="canonical" href="https://mrzleviatan.github.io/hostal-el-regalo/">
+  <link rel="alternate" hreflang="es" href="https://mrzleviatan.github.io/hostal-el-regalo/?lang=es">
+  <link rel="alternate" hreflang="en" href="https://mrzleviatan.github.io/hostal-el-regalo/?lang=en">
+  <link rel="alternate" hreflang="fr" href="https://mrzleviatan.github.io/hostal-el-regalo/?lang=fr">
+  <link rel="alternate" hreflang="de" href="https://mrzleviatan.github.io/hostal-el-regalo/?lang=de">
+  <link rel="alternate" hreflang="pt" href="https://mrzleviatan.github.io/hostal-el-regalo/?lang=pt">
+
+  <!-- Open Graph: vista previa al compartir en WhatsApp, Facebook, etc.
+       Dirección publicada en GitHub Pages. Al poner un dominio propio, cambia estas URL (deben ser absolutas). -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="El Regalo · Hostal & Cafetería">
+  <meta property="og:title" content="El Regalo · Hostal & Cafetería en Salento, Quindío">
+  <meta property="og:description" content="Duerme entre cafetales, despierta con café de la vereda. Hostal y cafetería en la Vereda Palestina, Salento.">
+  <meta property="og:url" content="https://mrzleviatan.github.io/hostal-el-regalo/">
+  <meta property="og:image" content="https://mrzleviatan.github.io/hostal-el-regalo/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo de El Regalo: barranquero sobre una rama de café, frente al mural del hostal">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/logo-512.png">
+
+  <!-- Fuente: Nunito (redondeada y legible, con peso 900 como los títulos del catálogo). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================
+       1. Variables: colores de la identidad de El Regalo
+       (idénticos a Catálogo El Regalo y QR Regalo).
+       ========================================================== */
+    :root {
+      --verde: #2b7a57;
+      --verde-claro: #4fb286;
+      --verde-oscuro: #1d5a40;
+      --azul: #1f5fb8;
+      --azul-claro: #3fa9e0;
+      --amarillo: #fcd116;
+      --rojo: #ce1126;
+      --cereza: #a3101c;
+      --crema: #fff8e7;
+      --cafe: #5b4636;
+      --tinta: #1a1c20;
+      --whatsapp: #1fa855;        /* verde WhatsApp con contraste AA sobre blanco */
+      --whatsapp-oscuro: #178a45;
+
+      --font: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      --radio: .75rem;
+      --sombra: 0 1px 2px rgb(0 0 0 / .05), 0 0 0 1px rgb(0 0 0 / .05);
+      --sombra-alta: 0 10px 30px -10px rgb(29 90 64 / .35);
+      --nav-alto: 4rem;
+    }
+
+    /* ==========================================================
+       2. Base
+       ========================================================== */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-alto); -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; background: var(--crema); color: var(--tinta);
+      font-family: var(--font); font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p { margin: 0; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; border-radius: 4px; }
+    [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .contenedor { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1rem; }
+    .icono { width: 1.25em; height: 1.25em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Salto al contenido para teclado. */
+    .saltar { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--verde-oscuro); color: #fff; border-radius: .5rem; }
+    .saltar:focus { top: 1rem; }
+
+    /* Franja tricolor (amarillo 50 %, azul 25 %, rojo 25 %). */
+    .tricolor { height: .375rem; background: linear-gradient(90deg, var(--amarillo) 0 50%, var(--azul) 50% 75%, var(--rojo) 75%); }
+
+    /* ==========================================================
+       3. Botones (mismas variantes del catálogo)
+       ========================================================== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 2.75rem; padding: .625rem 1.25rem; border: 0; border-radius: .625rem;
+      font: inherit; font-weight: 800; text-decoration: none; cursor: pointer; text-align: center;
+      transition: background-color .2s, box-shadow .2s, transform .15s, color .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0) scale(.98); }
+    .btn-lg { min-height: 3.25rem; padding: .75rem 1.5rem; font-size: 1.0625rem; }
+    .btn-primary { background: var(--verde); color: #fff; }
+    .btn-primary:hover { background: var(--verde-oscuro); box-shadow: var(--sombra-alta); }
+    .btn-whatsapp { background: var(--whatsapp); color: #fff; }
+    .btn-whatsapp:hover { background: var(--whatsapp-oscuro); box-shadow: 0 10px 30px -10px rgb(31 168 85 / .6); }
+    .btn-secondary { background: #fff; color: var(--tinta); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .15); }
+    .btn-secondary:hover { background: #f6f6f6; }
+    .btn-claro { background: rgb(255 255 255 / .14); color: #fff; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .7); backdrop-filter: blur(4px); }
+    .btn-claro:hover { background: rgb(255 255 255 / .25); }
+
+    /* ==========================================================
+       4. Navegación fija
+       ========================================================== */
+    .nav {
+      position: fixed; inset: 0 0 auto; z-index: 50; color: #fff;
+      transition: background-color .3s, box-shadow .3s, color .3s;
+    }
+    .nav .tricolor { transition: height .3s; }
+    /* Al bajar del hero la barra pasa a crema, como la barra del catálogo. */
+    .nav.solida { background: rgb(255 248 231 / .96); color: var(--tinta); backdrop-filter: blur(8px); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+    .nav-fila { display: flex; align-items: center; gap: .75rem; height: var(--nav-alto); }
+    .marca { display: flex; align-items: center; gap: .5rem; text-decoration: none; font-weight: 900; font-size: 1.125rem; line-height: 1.1; margin-right: auto; }
+    .marca img { width: 2.5rem; height: 2.5rem; border-radius: 999px; background: var(--crema); padding: 2px; box-shadow: 0 1px 3px rgb(0 0 0 / .25); }
+    .marca small { display: block; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+    .nav-enlaces { display: none; }
+    .nav-enlaces a { text-decoration: none; font-weight: 700; font-size: .9375rem; padding: .375rem .25rem; border-bottom: 2px solid transparent; transition: border-color .2s, color .2s; }
+    .nav-enlaces a:hover, .nav-enlaces a.activo { border-bottom-color: var(--amarillo); }
+    .nav.solida .nav-enlaces a:hover, .nav.solida .nav-enlaces a.activo { color: var(--verde-oscuro); border-bottom-color: var(--verde); }
+
+    /* Selector de idioma: botón con el código y menú desplegable. */
+    .idioma { position: relative; }
+    .idioma-btn {
+      display: inline-flex; align-items: center; gap: .375rem; min-height: 2.5rem; padding: 0 .625rem;
+      border: 0; border-radius: 999px; background: rgb(255 255 255 / .16); color: inherit; font: inherit; font-weight: 800; font-size: .875rem; cursor: pointer;
+    }
+    .nav.solida .idioma-btn { background: rgb(43 122 87 / .1); color: var(--verde-oscuro); }
+    .idioma-menu {
+      position: absolute; right: 0; top: calc(100% + .5rem); min-width: 10rem; padding: .375rem; margin: 0; list-style: none;
+      background: #fff; color: var(--tinta); border-radius: var(--radio); box-shadow: 0 12px 32px rgb(0 0 0 / .18);
+    }
+    .idioma-menu button {
+      display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 1rem; padding: .5rem .75rem;
+      border: 0; border-radius: .5rem; background: none; font: inherit; font-weight: 700; cursor: pointer; text-align: left;
+    }
+    .idioma-menu button:hover { background: rgb(43 122 87 / .08); }
+    .idioma-menu button[aria-current="true"] { background: var(--verde); color: #fff; }
+    .idioma-menu span { font-size: .75rem; letter-spacing: .05em; opacity: .7; }
+
+    /* Botón hamburguesa (solo móvil). */
+    .hamburguesa { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; border-radius: .625rem; background: transparent; color: inherit; cursor: pointer; }
+    .hamburguesa span, .hamburguesa span::before, .hamburguesa span::after { content: ''; display: block; width: 1.375rem; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, background-color .25s; position: relative; }
+    .hamburguesa span::before { position: absolute; top: -7px; }
+    .hamburguesa span::after { position: absolute; top: 7px; }
+    .hamburguesa[aria-expanded="true"] span { background: transparent; }
+    .hamburguesa[aria-expanded="true"] span::before { transform: translateY(7px) rotate(45deg); }
+    .hamburguesa[aria-expanded="true"] span::after { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Panel del menú móvil. */
+    .menu-movil {
+      position: fixed; inset: calc(var(--nav-alto) + .375rem) 0 auto; z-index: 49; padding: .5rem 1rem 1.25rem;
+      background: var(--crema); color: var(--tinta); box-shadow: 0 12px 24px rgb(0 0 0 / .15);
+      transform: translateY(-1rem); opacity: 0; visibility: hidden; transition: transform .25s, opacity .25s, visibility .25s;
+    }
+    .menu-movil.abierto { transform: none; opacity: 1; visibility: visible; }
+    .menu-movil a:not(.btn) { display: block; padding: .75rem .25rem; font-weight: 800; font-size: 1.125rem; text-decoration: none; border-bottom: 1px solid rgb(0 0 0 / .07); }
+    .menu-movil .btn { width: 100%; margin-top: 1rem; }
+
+    @media (min-width: 960px) {
+      .nav-enlaces { display: flex; gap: 1.25rem; }
+      .hamburguesa, .menu-movil { display: none; }
+    }
+
+    /* ==========================================================
+       5. Hero
+       ========================================================== */
+    .hero { position: relative; min-height: 100svh; display: grid; align-items: end; color: #fff; overflow: hidden; background: var(--verde-oscuro); }
+    .hero-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: acercar 18s ease-out both; }
+    /* Degradado verde para garantizar el contraste del texto blanco. */
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(29 90 64 / .55) 0%, rgb(29 90 64 / .15) 35%, rgb(20 50 38 / .85) 100%); }
+    .hero-contenido { position: relative; z-index: 1; padding-top: calc(var(--nav-alto) + 3rem); padding-bottom: 4.5rem; }
+    .hero-logo { width: 5.5rem; height: 5.5rem; border-radius: 999px; background: var(--crema); padding: 3px; box-shadow: 0 4px 16px rgb(0 0 0 / .3); margin-bottom: 1.25rem; }
+    .etiqueta { display: inline-flex; align-items: center; gap: .5rem; font-size: .8125rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .etiqueta::before { content: ''; width: 1.75rem; height: .25rem; border-radius: 2px; background: linear-gradient(90deg, var(--amarillo) 0 50%, var(--azul) 50% 75%, var(--rojo) 75%); }
+    .hero h1 { font-size: clamp(2.75rem, 11vw, 5.5rem); font-weight: 900; line-height: 1; margin: .75rem 0 .5rem; letter-spacing: -.02em; text-shadow: 0 2px 20px rgb(0 0 0 / .25); }
+    .hero h1 span { display: block; font-size: .38em; font-weight: 800; letter-spacing: 0; color: var(--amarillo); margin-top: .35rem; }
+    .hero-lema { max-width: 34rem; font-size: clamp(1.125rem, 3.6vw, 1.375rem); font-weight: 600; color: rgb(255 255 255 / .92); }
+    .hero-acciones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .hero-acciones .btn { flex: 1 1 14rem; }
+    @media (min-width: 640px) { .hero-acciones .btn { flex: 0 0 auto; } }
+    .bajar { position: absolute; left: 50%; bottom: 1.25rem; z-index: 1; translate: -50% 0; color: rgb(255 255 255 / .8); animation: flotar 2.2s ease-in-out infinite; }
+    @keyframes acercar { from { transform: scale(1.12); } to { transform: scale(1); } }
+    @keyframes flotar { 50% { transform: translateY(6px); } }
+
+    /* ==========================================================
+       6. Secciones genéricas
+       ========================================================== */
+    .seccion { padding: 4.5rem 0; }
+    .seccion.blanca { background: #fff; }
+    .seccion.verde { background: var(--verde); color: #fff; position: relative; overflow: hidden; }
+    .seccion-cabecera { max-width: 40rem; margin-bottom: 2.5rem; }
+    .seccion-cabecera.centro { margin-left: auto; margin-right: auto; text-align: center; }
+    .seccion-cabecera.centro .etiqueta { justify-content: center; }
+    .etiqueta.verde { color: var(--verde); }
+    .seccion h2 { font-size: clamp(1.875rem, 6vw, 2.75rem); font-weight: 900; line-height: 1.1; color: var(--verde-oscuro); margin: .5rem 0 .75rem; letter-spacing: -.01em; }
+    .seccion.verde h2 { color: #fff; }
+    .intro { color: rgb(26 28 32 / .75); font-size: 1.125rem; }
+    .seccion.verde .intro { color: rgb(255 255 255 / .88); }
+    .card { background: #fff; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .badge { display: inline-flex; align-items: center; gap: .375rem; padding: .25rem .625rem; border-radius: 999px; font-size: .8125rem; font-weight: 700; background: rgb(43 122 87 / .1); color: var(--verde-oscuro); }
+
+    /* Aparición suave al hacer scroll. */
+    .revelar { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--retraso, 0s); }
+    .revelar.visible { opacity: 1; transform: none; }
+
+    /* ==========================================================
+       7. Sobre nosotros
+       ========================================================== */
+    .sobre { display: grid; gap: 2.5rem; align-items: center; }
+    .sobre-texto p + p { margin-top: 1rem; }
+    .sobre-texto p { color: rgb(26 28 32 / .8); }
+    .rasgos { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 2rem; }
+    .rasgo { padding: 1rem .75rem; text-align: center; }
+    .rasgo .icono { width: 1.75rem; height: 1.75rem; color: var(--verde); margin: 0 auto .375rem; }
+    .rasgo strong { display: block; font-size: .875rem; line-height: 1.3; }
+    .sobre-fotos { position: relative; }
+    .sobre-fotos .principal { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 1.25rem; box-shadow: var(--sombra-alta); }
+    .sobre-fotos .mural { position: absolute; left: -.5rem; bottom: -1.5rem; width: 42%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 1rem; border: 5px solid var(--crema); box-shadow: 0 8px 24px rgb(0 0 0 / .2); }
+    @media (min-width: 860px) {
+      .sobre { grid-template-columns: 1.05fr .95fr; gap: 4rem; }
+      .sobre-fotos .mural { left: -2.5rem; }
+    }
+
+    /* ==========================================================
+       8. Habitaciones con carrusel
+       ========================================================== */
+    .habitaciones { display: grid; gap: 1.5rem; }
+    @media (min-width: 700px) { .habitaciones { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1040px) { .habitaciones { grid-template-columns: repeat(3, 1fr); } }
+    .habitacion { display: flex; flex-direction: column; overflow: hidden; transition: transform .25s, box-shadow .25s; }
+    .habitacion:hover { transform: translateY(-4px); box-shadow: var(--sombra-alta); }
+    .habitacion-cuerpo { display: flex; flex-direction: column; flex: 1; padding: 1.25rem; }
+    .habitacion h3 { font-size: 1.375rem; font-weight: 900; color: var(--verde-oscuro); line-height: 1.2; }
+    .habitacion .tipo { font-size: .8125rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--cafe); }
+    .habitacion p { margin: .625rem 0 1rem; color: rgb(26 28 32 / .78); font-size: 1rem; }
+    .detalles { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.25rem; padding: 0; list-style: none; }
+    .detalles .icono { width: 1rem; height: 1rem; }
+    .habitacion .btn { margin-top: auto; }
+
+    .carrusel { position: relative; background: var(--verde-oscuro); }
+    .carrusel-pista { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+    .carrusel-pista::-webkit-scrollbar { display: none; }
+    .carrusel-pista img { flex: 0 0 100%; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; scroll-snap-align: start; }
+    .carrusel-flecha {
+      position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
+      border: 0; border-radius: 999px; background: rgb(255 255 255 / .9); color: var(--tinta); cursor: pointer;
+      box-shadow: 0 2px 8px rgb(0 0 0 / .2); transition: opacity .2s, transform .15s;
+    }
+    .carrusel-flecha:hover { transform: scale(1.08); }
+    .carrusel-flecha:disabled { opacity: 0; pointer-events: none; }
+    .carrusel-flecha.prev { left: .625rem; }
+    .carrusel-flecha.next { right: .625rem; }
+    .puntos { position: absolute; left: 0; right: 0; bottom: .625rem; display: flex; justify-content: center; gap: .375rem; }
+    .puntos button { width: .5rem; height: .5rem; padding: 0; border: 0; border-radius: 999px; background: rgb(255 255 255 / .55); cursor: pointer; transition: width .25s, background-color .25s; }
+    .puntos button[aria-current="true"] { width: 1.5rem; background: #fff; }
+    /* Área táctil mínima para los puntos sin agrandarlos visualmente. */
+    .puntos button { position: relative; }
+    .puntos button::after { content: ''; position: absolute; inset: -.75rem -.25rem; }
+    .nota { margin-top: 2rem; text-align: center; color: rgb(26 28 32 / .7); font-size: .9375rem; }
+
+    /* ==========================================================
+       9. Servicios
+       ========================================================== */
+    .servicios { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+    @media (min-width: 760px) { .servicios { grid-template-columns: repeat(3, 1fr); gap: 1rem; } }
+    .servicio { padding: 1.25rem 1rem; text-align: center; transition: transform .25s, box-shadow .25s; }
+    .servicio:hover { transform: translateY(-3px); box-shadow: var(--sombra-alta); }
+    .servicio-icono { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin: 0 auto .75rem; border-radius: 1rem; background: rgb(43 122 87 / .1); color: var(--verde); }
+    .servicio:nth-child(4n+2) .servicio-icono { background: rgb(31 95 184 / .1); color: var(--azul); }
+    .servicio:nth-child(4n+3) .servicio-icono { background: rgb(91 70 54 / .12); color: var(--cafe); }
+    .servicio:nth-child(4n+4) .servicio-icono { background: rgb(206 17 38 / .08); color: var(--cereza); }
+    .servicio-icono .icono { width: 1.75rem; height: 1.75rem; }
+    .servicio h3 { font-size: 1rem; font-weight: 800; line-height: 1.3; }
+    .servicio p { margin-top: .25rem; font-size: .875rem; line-height: 1.45; color: rgb(26 28 32 / .65); }
+
+    /* ==========================================================
+       10. Galería + lightbox
+       ========================================================== */
+    .galeria { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 9rem; gap: .5rem; }
+    @media (min-width: 760px) { .galeria { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 13rem; gap: .75rem; } }
+    .galeria button { position: relative; padding: 0; border: 0; border-radius: var(--radio); overflow: hidden; cursor: zoom-in; background: rgb(43 122 87 / .15); }
+    .galeria button.alta { grid-row: span 2; }
+    .galeria button.ancha { grid-column: span 2; }
+    .galeria img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .galeria button:hover img { transform: scale(1.06); }
+    .galeria button::after { content: ''; position: absolute; inset: 0; background: rgb(29 90 64 / 0); transition: background-color .3s; }
+    .galeria button:hover::after { background: rgb(29 90 64 / .15); }
+
+    .lightbox { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(12 20 16 / .95); color: #fff; }
+    .lightbox::backdrop { background: rgb(0 0 0 / .6); }
+    .lightbox[open] { display: grid; place-items: center; animation: aparecer .25s ease; }
+    @keyframes aparecer { from { opacity: 0; } }
+    .lightbox figure { margin: 0; display: grid; gap: .75rem; justify-items: center; padding: 3.5rem 1rem; }
+    .lightbox img { max-width: min(92vw, 80rem); max-height: 78svh; object-fit: contain; border-radius: .5rem; }
+    .lightbox figcaption { font-weight: 600; text-align: center; color: rgb(255 255 255 / .85); }
+    .lb-btn { position: absolute; display: grid; place-items: center; width: 3rem; height: 3rem; border: 0; border-radius: 999px; background: rgb(255 255 255 / .12); color: #fff; cursor: pointer; transition: background-color .2s; }
+    .lb-btn:hover { background: rgb(255 255 255 / .25); }
+    .lb-btn .icono { width: 1.5rem; height: 1.5rem; }
+    .lb-cerrar { top: 1rem; right: 1rem; }
+    .lb-prev { left: .75rem; top: 50%; translate: 0 -50%; }
+    .lb-next { right: .75rem; top: 50%; translate: 0 -50%; }
+    .lb-contador { position: absolute; top: 1.6rem; left: 1.25rem; font-weight: 800; font-size: .875rem; letter-spacing: .08em; }
+
+    /* ==========================================================
+       11. Carta
+       ========================================================== */
+    .carta-mural { position: absolute; inset: 0 0 0 auto; width: 55%; height: 100%; object-fit: cover; object-position: top; opacity: .3; -webkit-mask-image: linear-gradient(to left, #000, transparent); mask-image: linear-gradient(to left, #000, transparent); }
+    .carta { position: relative; display: grid; gap: 2rem; align-items: center; }
+    .carta .etiqueta { color: var(--amarillo); }
+    .carta-acciones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
+    .carta-acciones .btn-primary { background: var(--amarillo); color: var(--tinta); }
+    .carta-acciones .btn-primary:hover { background: #ffe14d; }
+    .idiomas-lista { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; padding: 0; list-style: none; }
+    .idiomas-lista li { padding: .25rem .75rem; border-radius: 999px; background: rgb(255 255 255 / .14); font-size: .8125rem; font-weight: 800; letter-spacing: .05em; }
+    .carta-foto { width: 100%; max-width: 26rem; justify-self: center; aspect-ratio: 1; object-fit: cover; border-radius: 999px; border: 6px solid rgb(255 255 255 / .9); box-shadow: 0 20px 40px rgb(0 0 0 / .3); }
+    @media (min-width: 860px) { .carta { grid-template-columns: 1.2fr .8fr; } }
+
+    /* ==========================================================
+       12. Ubicación
+       ========================================================== */
+    .ubicacion { display: grid; gap: 1.5rem; }
+    @media (min-width: 860px) { .ubicacion { grid-template-columns: 1.3fr 1fr; align-items: stretch; } }
+    .mapa { overflow: hidden; min-height: 22rem; }
+    .mapa iframe { display: block; width: 100%; height: 100%; min-height: 22rem; border: 0; }
+    .como-llegar { padding: 1.5rem; }
+    .como-llegar h3 { font-size: 1.25rem; font-weight: 900; color: var(--verde-oscuro); }
+    .direccion { display: flex; gap: .625rem; margin: .75rem 0 1.25rem; font-weight: 700; }
+    .direccion .icono { color: var(--rojo); margin-top: .2rem; }
+    .pasos { display: grid; gap: 1rem; margin: 0 0 1.5rem; padding: 0; list-style: none; counter-reset: paso; }
+    .pasos li { position: relative; padding-left: 2.75rem; font-size: 1rem; color: rgb(26 28 32 / .8); }
+    .pasos li::before { counter-increment: paso; content: counter(paso); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 999px; background: var(--verde); color: #fff; font-weight: 900; font-size: .875rem; }
+    .pasos strong { display: block; color: var(--tinta); }
+    .como-llegar .btn { width: 100%; }
+
+    /* ==========================================================
+       13. Contacto
+       ========================================================== */
+    .contactos { display: grid; gap: .75rem; }
+    @media (min-width: 640px) { .contactos { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1040px) { .contactos { grid-template-columns: repeat(5, 1fr); } }
+    .contacto {
+      display: flex; align-items: center; gap: 1rem; padding: 1.125rem 1.25rem; border-radius: 1rem; color: #fff; text-decoration: none;
+      transition: transform .2s, box-shadow .2s, filter .2s;
+    }
+    .contacto:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -8px rgb(0 0 0 / .35); filter: brightness(1.06); }
+    @media (min-width: 1040px) { .contacto { flex-direction: column; text-align: center; padding: 1.75rem 1rem; } }
+    .contacto .icono { width: 2rem; height: 2rem; }
+    .contacto strong { display: block; font-size: 1.125rem; font-weight: 900; line-height: 1.2; }
+    .contacto small { display: block; font-size: .875rem; opacity: .9; overflow-wrap: anywhere; }
+    .c-whatsapp { background: var(--whatsapp-oscuro); }
+    .c-instagram { background: linear-gradient(135deg, #7a2bc2, #c1356b 55%, #d9762b); }
+    .c-facebook { background: #1765d4; }
+    .c-telefono { background: var(--verde-oscuro); }
+    .c-carta { background: var(--cafe); }
+    .horarios { display: grid; gap: 1rem; margin-top: 2rem; }
+    @media (min-width: 640px) { .horarios { grid-template-columns: repeat(2, 1fr); } }
+    .horario { display: flex; gap: 1rem; padding: 1.25rem; }
+    .horario .icono { width: 1.75rem; height: 1.75rem; color: var(--verde); }
+    .horario h3 { font-size: 1.0625rem; font-weight: 900; }
+    .horario p { color: rgb(26 28 32 / .75); font-size: 1rem; white-space: pre-line; }
+    /* Varios números dentro de la tarjeta de teléfono, cada uno con área táctil cómoda. */
+    .telefonos { display: flex; flex-wrap: wrap; justify-content: inherit; gap: .125rem .875rem; }
+    .telefonos a { display: inline-flex; align-items: center; min-height: 2rem; color: #fff; font-weight: 700; text-underline-offset: 3px; }
+    .telefonos a:hover { text-decoration-thickness: 2px; }
+    @media (min-width: 1040px) { .telefonos { flex-direction: column; align-items: center; } }
+
+    /* ==========================================================
+       14. Footer
+       ========================================================== */
+    .pie { background: var(--verde-oscuro); color: rgb(255 255 255 / .85); padding: 3rem 0 6rem; font-size: .9375rem; }
+    .pie-fila { display: grid; gap: 2rem; }
+    @media (min-width: 760px) { .pie-fila { grid-template-columns: 1.4fr 1fr 1fr; } }
+    .pie .marca { color: #fff; font-size: 1.25rem; }
+    .pie h2 { font-size: .8125rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; color: var(--amarillo); margin-bottom: .75rem; }
+    .pie ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .375rem; }
+    .pie a { text-decoration: none; }
+    .pie a:hover { color: #fff; text-decoration: underline; }
+    .pie-legal { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / .15); font-size: .8125rem; color: rgb(255 255 255 / .7); }
+
+    /* ==========================================================
+       15. Botón flotante de WhatsApp
+       ========================================================== */
+    .wa-flotante {
+      position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 60;
+      display: grid; place-items: center; width: 3.75rem; height: 3.75rem; border-radius: 999px;
+      background: var(--whatsapp); color: #fff; box-shadow: 0 8px 24px rgb(0 0 0 / .25); transition: transform .2s, background-color .2s;
+    }
+    .wa-flotante:hover { transform: scale(1.08); background: var(--whatsapp-oscuro); }
+    .wa-flotante .icono { width: 1.875rem; height: 1.875rem; }
+    /* Onda suave para llamar la atención sin molestar. */
+    .wa-flotante::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--whatsapp); z-index: -1; animation: onda 2.6s ease-out infinite; }
+    @keyframes onda { 0% { transform: scale(1); opacity: .5; } 80%, 100% { transform: scale(1.6); opacity: 0; } }
+
+    /* Sin animaciones si el usuario lo pide en su sistema. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .revelar { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Íconos SVG reutilizables (trazos estilo Lucide). Se usan con <use href="#i-nombre">. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+    <symbol id="i-telefono" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-carta" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
+    <symbol id="i-cafe" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v2"/><path d="M10 2v2"/><path d="M14 2v2"/></symbol>
+    <symbol id="i-desayuno" viewBox="0 0 24 24"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></symbol>
+    <symbol id="i-personas" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-montana" viewBox="0 0 24 24"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></symbol>
+    <symbol id="i-agua" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-cama" viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></symbol>
+    <symbol id="i-ducha" viewBox="0 0 24 24"><path d="M4 4 2.5 2.5"/><path d="M13.5 6.5a4.95 4.95 0 0 0-7 7"/><path d="M15 5 5 15"/><path d="M14 17v.01"/><path d="M10 16v.01"/><path d="M13 13v.01"/><path d="M16 10v.01"/><path d="M11 20v.01"/><path d="M17 14v.01"/><path d="M20 11v.01"/></symbol>
+    <symbol id="i-hoja" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+    <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-flecha-izq" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-flecha-der" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-abajo" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-globo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+    <symbol id="i-ruta" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8-8-2z"/></symbol>
+  </svg>
+
+  <a class="saltar" href="#contenido" data-i18n="a11y.skip">Saltar al contenido</a>
+
+  <!-- ============ NAVEGACIÓN ============ -->
+  <header class="nav" id="nav">
+    <div class="tricolor"></div>
+    <nav class="contenedor nav-fila" aria-label="Principal" data-i18n-attr="aria-label:a11y.nav">
+      <a class="marca" href="#inicio">
+        <img src="img/logo.svg" alt="" width="40" height="40">
+        <span>El Regalo<small>Hostal &amp; Cafetería</small></span>
+      </a>
+      <div class="nav-enlaces">
+        <a href="#nosotros" data-i18n="nav.about">Nosotros</a>
+        <a href="#habitaciones" data-i18n="nav.rooms">Habitaciones</a>
+        <a href="#servicios" data-i18n="nav.services">Servicios</a>
+        <a href="#galeria" data-i18n="nav.gallery">Galería</a>
+        <a href="#carta" data-i18n="nav.menu">Carta</a>
+        <a href="#ubicacion" data-i18n="nav.location">Ubicación</a>
+        <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+      </div>
+      <!-- Selector de idioma (mismos idiomas que la carta por QR). -->
+      <div class="idioma">
+        <button class="idioma-btn" id="idioma-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="idioma-menu"
+                aria-label="Cambiar idioma" data-i18n-attr="aria-label:a11y.lang">
+          <svg class="icono" aria-hidden="true"><use href="#i-globo"/></svg><span id="idioma-actual">ES</span>
+        </button>
+        <ul class="idioma-menu" id="idioma-menu" hidden>
+          <li><button type="button" data-lang="es" lang="es">Español <span>ES</span></button></li>
+          <li><button type="button" data-lang="en" lang="en">English <span>EN</span></button></li>
+          <li><button type="button" data-lang="fr" lang="fr">Français <span>FR</span></button></li>
+          <li><button type="button" data-lang="de" lang="de">Deutsch <span>DE</span></button></li>
+          <li><button type="button" data-lang="pt" lang="pt">Português <span>PT</span></button></li>
+        </ul>
+      </div>
+      <button class="hamburguesa" id="hamburguesa" type="button" aria-expanded="false" aria-controls="menu-movil"
+              aria-label="Abrir menú" data-i18n-attr="aria-label:a11y.menu"><span></span></button>
+    </nav>
+  </header>
+
+  <!-- Menú desplegable en móvil. -->
+  <div class="menu-movil" id="menu-movil">
+    <a href="#nosotros" data-i18n="nav.about">Nosotros</a>
+    <a href="#habitaciones" data-i18n="nav.rooms">Habitaciones</a>
+    <a href="#servicios" data-i18n="nav.services">Servicios</a>
+    <a href="#galeria" data-i18n="nav.gallery">Galería</a>
+    <a href="#carta" data-i18n="nav.menu">Carta</a>
+    <a href="#ubicacion" data-i18n="nav.location">Ubicación</a>
+    <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+    <a class="btn btn-whatsapp" data-link="whatsapp" href="https://wa.me/573001234567" target="_blank" rel="noopener">
+      <svg class="icono" aria-hidden="true"><use href="#i-whatsapp"/></svg><span data-i18n="cta.whatsapp">Escríbenos por WhatsApp</span>
+    </a>
+  </div>
+
+  <main id="contenido">
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+      <!-- Foto de portada: la casa de El Regalo entre la vegetación (versión móvil y escritorio). -->
+      <img class="hero-foto" src="img/hero.webp"
+           srcset="img/hero-800.webp 800w, img/hero.webp 1500w"
+           sizes="100vw" alt="La casa de El Regalo entre la vegetación, junto al camino de la vereda" data-i18n-attr="alt:img.hero"
+           fetchpriority="high">
+      <div class="contenedor hero-contenido">
+        <img class="hero-logo revelar" src="img/logo.svg" alt="Logo de El Regalo: barranquero en una rama de café" data-i18n-attr="alt:img.logo" width="88" height="88">
+        <p class="etiqueta revelar" style="--retraso:.1s" data-i18n="hero.kicker">Salento · Quindío · Vereda Palestina</p>
+        <h1 class="revelar" id="hero-titulo" style="--retraso:.2s">El Regalo <span>Hostal &amp; Cafetería</span></h1>
+        <!-- [SLOGAN] -->
+        <p class="hero-lema revelar" style="--retraso:.3s" data-i18n="hero.slogan">Descanso, café y naturaleza en armonía.</p>
+        <div class="hero-acciones revelar" style="--retraso:.4s">
+          <a class="btn btn-whatsapp btn-lg" data-link="whatsapp" href="https://wa.me/573001234567" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-whatsapp"/></svg><span data-i18n="cta.whatsapp">Escríbenos por WhatsApp</span>
+          </a>
+          <a class="btn btn-claro btn-lg" href="#habitaciones" data-i18n="hero.rooms">Ver habitaciones</a>
+        </div>
+      </div>
+      <a class="bajar" href="#nosotros" aria-label="Bajar a Sobre nosotros" data-i18n-attr="aria-label:a11y.down">
+        <svg class="icono" style="width:2rem;height:2rem" aria-hidden="true"><use href="#i-abajo"/></svg>
+      </a>
+    </section>
+
+    <!-- ============ 2. SOBRE NOSOTROS ============ -->
+    <section class="seccion" id="nosotros" aria-labelledby="nosotros-titulo">
+      <div class="contenedor sobre">
+        <div class="sobre-texto revelar">
+          <p class="etiqueta verde" data-i18n="about.kicker">Sobre nosotros</p>
+          <h2 id="nosotros-titulo" data-i18n="about.title">Un refugio entre paisajes y aves para vivir experiencias inolvidables</h2>
+          <p data-i18n="about.p1">El Regalo nació en una finca de la Vereda Palestina, a las afueras de Salento, rodeada de cafetales, guaduas y montañas. Aquí el tiempo va más despacio: el café se toma con calma y las historias de viaje se comparten en la terraza.</p>
+          <p data-i18n="about.p2">Somos un hostal familiar y una cafetería de comida típica. Te recibimos como en casa, te contamos los mejores planes del Quindío —el Valle de Cocora, las fincas cafeteras, los miradores— y te esperamos con un tinto recién colado cuando vuelvas.</p>
+          <ul class="rasgos" role="list">
+            <li class="rasgo card"><svg class="icono" aria-hidden="true"><use href="#i-hoja"/></svg><strong data-i18n="about.f1">Entre cafetales</strong></li>
+            <li class="rasgo card"><svg class="icono" aria-hidden="true"><use href="#i-montana"/></svg><strong data-i18n="about.f2">Vista a la montaña</strong></li>
+            <li class="rasgo card"><svg class="icono" aria-hidden="true"><use href="#i-personas"/></svg><strong data-i18n="about.f3">Ambiente familiar</strong></li>
+          </ul>
+        </div>
+        <div class="sobre-fotos revelar" style="--retraso:.15s">
+          <!-- Barra de la cafetería con el letrero de El Regalo (img/nosotros.webp, 4:5). -->
+          <img class="principal" loading="lazy" width="800" height="1000" src="img/nosotros.webp"
+               alt="Barra de la cafetería con el letrero Hostal y Cafetería El Regalo" data-i18n-attr="alt:img.about">
+          <!-- Foto real: mural del barranquero que inspira el logo de El Regalo. -->
+          <img class="mural" loading="lazy" width="529" height="900" src="img/mural-barranquero.webp"
+               alt="Mural de un barranquero entre hojas y frutos de café pintado en El Regalo" data-i18n-attr="alt:img.mural">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. HABITACIONES ============ -->
+    <section class="seccion blanca" id="habitaciones" aria-labelledby="habitaciones-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera centro revelar">
+          <p class="etiqueta verde" data-i18n="rooms.kicker">Dónde dormir</p>
+          <h2 id="habitaciones-titulo" data-i18n="rooms.title">Habitaciones</h2>
+          <p class="intro" data-i18n="rooms.intro">Camas cómodas, cobijas gruesas para las noches frías de montaña y ventanas que dan al verde. Elige la que mejor va con tu viaje.</p>
+        </div>
+
+        <!-- Las tarjetas se crean desde la lista HABITACIONES del <script> (fotos, camas, textos por idioma).
+             Para agregar, quitar o editar una habitación, cambia solo esa lista. -->
+        <div class="habitaciones revelar" id="lista-habitaciones"></div>
+        <p class="nota revelar" data-i18n="rooms.note">Tarifas y disponibilidad por WhatsApp: te respondemos rápido.</p>
+      </div>
+    </section>
+
+    <!-- ============ 4. SERVICIOS ============ -->
+    <section class="seccion" id="servicios" aria-labelledby="servicios-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera centro revelar">
+          <p class="etiqueta verde" data-i18n="services.kicker">Comodidades</p>
+          <h2 id="servicios-titulo" data-i18n="services.title">Todo lo que necesitas</h2>
+          <p class="intro" data-i18n="services.intro">Lo básico bien hecho y unos cuantos detalles que hacen la diferencia.</p>
+        </div>
+        <ul class="servicios">
+          <li class="servicio card revelar"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-wifi"/></svg></div><h3 data-i18n="services.s1.t">WiFi gratis</h3><p data-i18n="services.s1.d">En habitaciones y zonas comunes.</p></li>
+          <li class="servicio card revelar" style="--retraso:.05s"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-cafe"/></svg></div><h3 data-i18n="services.s2.t">Cafetería</h3><p data-i18n="services.s2.d">Café de la región y comida típica.</p></li>
+          <li class="servicio card revelar" style="--retraso:.1s"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-desayuno"/></svg></div><h3 data-i18n="services.s3.t">Desayuno</h3><p data-i18n="services.s3.d">Un buen desayuno típico para empezar el día.</p></li>
+          <li class="servicio card revelar" style="--retraso:.05s"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-personas"/></svg></div><h3 data-i18n="services.s6.t">Zona común</h3><p data-i18n="services.s6.d">Hamacas, juegos y buena charla.</p></li>
+          <li class="servicio card revelar" style="--retraso:.1s"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-montana"/></svg></div><h3 data-i18n="services.s7.t">Terraza con vista</h3><p data-i18n="services.s7.d">Atardeceres sobre las montañas.</p></li>
+          <li class="servicio card revelar" style="--retraso:.15s"><div class="servicio-icono"><svg class="icono" aria-hidden="true"><use href="#i-agua"/></svg></div><h3 data-i18n="services.s8.t">Agua caliente</h3><p data-i18n="services.s8.d">Para las mañanas frescas de montaña.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 5. GALERÍA ============ -->
+    <section class="seccion blanca" id="galeria" aria-labelledby="galeria-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera centro revelar">
+          <p class="etiqueta verde" data-i18n="gallery.kicker">Galería</p>
+          <h2 id="galeria-titulo" data-i18n="gallery.title">Así se vive El Regalo</h2>
+          <p class="intro" data-i18n="gallery.intro">Toca una foto para verla en grande.</p>
+        </div>
+        <!-- Galería: cada botón tiene la miniatura (src) y la foto grande (data-full) en img/galeria/.
+             "ancha" ocupa dos columnas. Para cambiar una foto, reemplaza ambos archivos. -->
+        <div class="galeria revelar" id="galeria-grid">
+          <button type="button" class="ancha" data-full="img/galeria/casa.webp">
+            <img loading="lazy" src="img/galeria/casa-mini.webp" alt="Fachada amarilla de El Regalo con buganvilias" data-i18n-attr="alt:gallery.g1">
+          </button>
+          <button type="button" data-full="img/galeria/cafeteria.webp">
+            <img loading="lazy" src="img/galeria/cafeteria-mini.webp" alt="Barra de la cafetería con el letrero Hostal y Cafetería El Regalo" data-i18n-attr="alt:gallery.g2">
+          </button>
+          <button type="button" data-full="img/galeria/terraza.webp">
+            <img loading="lazy" src="img/galeria/terraza-mini.webp" alt="Terraza con comedor rodeada de vegetación" data-i18n-attr="alt:gallery.g3">
+          </button>
+          <button type="button" data-full="img/galeria/hamacas.webp">
+            <img loading="lazy" src="img/galeria/hamacas-mini.webp" alt="Hamaca y sillas de estiba de colores en la terraza" data-i18n-attr="alt:gallery.g4">
+          </button>
+          <button type="button" data-full="img/galeria/sala.webp">
+            <img loading="lazy" src="img/galeria/sala-mini.webp" alt="Sala común con sofá, televisor y mesa de madera" data-i18n-attr="alt:gallery.g5">
+          </button>
+          <button type="button" class="ancha" data-full="img/galeria/rincon.webp">
+            <img loading="lazy" src="img/galeria/rincon-mini.webp" alt="Rincón de descanso con sofás de estiba y mesa de tronco" data-i18n-attr="alt:gallery.g6">
+          </button>
+          <button type="button" class="ancha" data-full="img/galeria/willys.webp">
+            <img loading="lazy" src="img/galeria/willys-mini.webp" alt="Jeep Willys azul frente al hostal en la vereda" data-i18n-attr="alt:gallery.g7">
+          </button>
+          <button type="button" data-full="img/galeria/cocina.webp">
+            <img loading="lazy" src="img/galeria/cocina-mini.webp" alt="Cocina equipada con barra de madera y nevera" data-i18n-attr="alt:gallery.g8">
+          </button>
+          <button type="button" data-full="img/galeria/frappe.webp">
+            <img loading="lazy" src="img/galeria/frappe-mini.webp" alt="Café frío y porción de torta en una mesa de madera" data-i18n-attr="alt:gallery.g9">
+          </button>
+          <button type="button" data-full="img/galeria/cafe.webp">
+            <img loading="lazy" src="img/galeria/cafe-mini.webp" alt="Taza de café sobre una mesa de tronco" data-i18n-attr="alt:gallery.g10">
+          </button>
+          <button type="button" data-full="img/galeria/noche.webp">
+            <img loading="lazy" src="img/galeria/noche-mini.webp" alt="El hostal iluminado de noche entre los árboles" data-i18n-attr="alt:gallery.g11">
+          </button>
+          <button type="button" class="ancha" data-full="img/galeria/letrero.webp">
+            <img loading="lazy" src="img/galeria/letrero-mini.webp" alt="Letrero de Hostal y Cafetería El Regalo entre el bosque" data-i18n-attr="alt:gallery.g12">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox de la galería (se llena con JS). -->
+    <dialog class="lightbox" id="lightbox" aria-label="Foto ampliada" data-i18n-attr="aria-label:a11y.lightbox">
+      <span class="lb-contador" id="lb-contador" aria-live="polite"></span>
+      <figure>
+        <img id="lb-img" alt="">
+        <figcaption id="lb-texto"></figcaption>
+      </figure>
+      <button class="lb-btn lb-cerrar" type="button" id="lb-cerrar" aria-label="Cerrar" data-i18n-attr="aria-label:a11y.close"><svg class="icono" aria-hidden="true"><use href="#i-cerrar"/></svg></button>
+      <button class="lb-btn lb-prev" type="button" id="lb-prev" aria-label="Foto anterior" data-i18n-attr="aria-label:a11y.prev"><svg class="icono" aria-hidden="true"><use href="#i-flecha-izq"/></svg></button>
+      <button class="lb-btn lb-next" type="button" id="lb-next" aria-label="Foto siguiente" data-i18n-attr="aria-label:a11y.next"><svg class="icono" aria-hidden="true"><use href="#i-flecha-der"/></svg></button>
+    </dialog>
+
+    <!-- ============ 6. CARTA ============ -->
+    <section class="seccion verde" id="carta" aria-labelledby="carta-titulo">
+      <img class="carta-mural" src="img/mural-barranquero.webp" alt="" loading="lazy">
+      <div class="contenedor carta">
+        <div class="revelar">
+          <p class="etiqueta" data-i18n="menu.kicker">Cafetería</p>
+          <h2 id="carta-titulo" data-i18n="menu.title">Comida típica y café de la vereda</h2>
+          <p class="intro" data-i18n="menu.intro">Bandeja paisa, trucha, arepas, chocolate santafereño y el café que se cultiva a pocos metros. Ven aunque no te hospedes: la cafetería está abierta para todos.</p>
+          <ul class="idiomas-lista" aria-label="Idiomas de la carta" data-i18n-attr="aria-label:menu.langs">
+            <li>ES</li><li>EN</li><li>FR</li><li>DE</li><li>PT</li>
+          </ul>
+          <div class="carta-acciones">
+            <a class="btn btn-primary btn-lg" data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener">
+              <svg class="icono" aria-hidden="true"><use href="#i-carta"/></svg><span data-i18n="menu.cta">Ver carta</span>
+            </a>
+          </div>
+        </div>
+        <!-- Café y torta de la cafetería (img/carta.webp, cuadrada). -->
+        <img class="carta-foto revelar" style="--retraso:.15s" loading="lazy" width="600" height="600" src="img/carta.webp"
+             alt="Taza de café y porción de torta servidas en la cafetería" data-i18n-attr="alt:img.menu">
+      </div>
+    </section>
+
+    <!-- ============ 7. UBICACIÓN ============ -->
+    <section class="seccion" id="ubicacion" aria-labelledby="ubicacion-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera revelar">
+          <p class="etiqueta verde" data-i18n="location.kicker">Ubicación</p>
+          <h2 id="ubicacion-titulo" data-i18n="location.title">Cómo llegar</h2>
+          <p class="intro" data-i18n="location.intro">Estamos en el campo, a pocos minutos del pueblo de Salento: lo bastante cerca para todo y lo bastante lejos para descansar.</p>
+        </div>
+        <div class="ubicacion">
+          <!-- Mapa sin API key con el punto exacto de El Regalo (4.624588, -75.594742).
+               Para moverlo, cambia las coordenadas del src y CONFIG.mapa en el <script>. -->
+          <div class="mapa card revelar">
+            <iframe title="Mapa de El Regalo en la Vereda Palestina, Salento" data-i18n-attr="title:location.map"
+                    src="https://www.google.com/maps?q=4.624588,-75.594742&z=15&output=embed"
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+          <div class="como-llegar card revelar" style="--retraso:.1s">
+            <h3 data-i18n="location.addressTitle">Dirección</h3>
+                        <p class="direccion"><svg class="icono" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="location.address">Vereda Palestina, vía a la Finca El Ocaso · Salento, Quindío, Colombia</span></p>
+            <ol class="pasos">
+              <li><strong data-i18n="location.s1.t">Llega a Salento</strong><span data-i18n="location.s1.d">Buses directos desde Armenia y Pereira llegan a la terminal del pueblo.</span></li>
+              <li><strong data-i18n="location.s2.t">Toma el Willys a la Finca El Ocaso</strong><span data-i18n="location.s2.d">Desde la plaza principal salen los Willys hacia la Finca El Ocaso. Pide que te dejen en El Regalo: estamos sobre esa misma vía.</span></li>
+              <li><strong data-i18n="location.s3.t">O ven caminando</strong><span data-i18n="location.s3.d">Es un paseo bonito entre cafetales. Escríbenos y te enviamos la ubicación exacta.</span></li>
+            </ol>
+            <a class="btn btn-primary" data-link="maps" href="https://maps.app.goo.gl/8Gtb4edYofRERS4Z7" target="_blank" rel="noopener">
+              <svg class="icono" aria-hidden="true"><use href="#i-ruta"/></svg><span data-i18n="location.cta">Abrir en Google Maps</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8. CONTACTO ============ -->
+    <section class="seccion blanca" id="contacto" aria-labelledby="contacto-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera centro revelar">
+          <p class="etiqueta verde" data-i18n="contact.kicker">Contacto</p>
+          <h2 id="contacto-titulo" data-i18n="contact.title">¿Hablamos?</h2>
+          <p class="intro" data-i18n="contact.intro">Pregúntanos por disponibilidad, tarifas, planes o cómo llegar. Respondemos en español e inglés.</p>
+        </div>
+        <div class="contactos">
+          <a class="contacto c-whatsapp revelar" data-link="whatsapp" href="https://wa.me/573001234567" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-whatsapp"/></svg><span><strong>WhatsApp</strong><small data-i18n="contact.wa">La forma más rápida</small></span>
+          </a>
+          <a class="contacto c-instagram revelar" style="--retraso:.05s" data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-instagram"/></svg><span><strong>Instagram</strong><small data-text="instagram">@hostal_elregalo</small></span>
+          </a>
+          <a class="contacto c-facebook revelar" style="--retraso:.1s" data-link="facebook" href="https://facebook.com/elregalo.salento" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-facebook"/></svg><span><strong>Facebook</strong><small data-i18n="contact.fb">Fotos y novedades</small></span>
+          </a>
+          <!-- Teléfonos: se llenan desde CONFIG.telefonos (puedes poner uno o varios). -->
+          <div class="contacto c-telefono revelar" style="--retraso:.15s">
+            <svg class="icono" aria-hidden="true"><use href="#i-telefono"/></svg><span><strong data-i18n="contact.phone">Llámanos</strong>
+              <span class="telefonos" id="lista-telefonos"><a href="tel:+573148613948">314 861 3948</a><a href="tel:+573127908437">312 790 8437</a></span></span>
+          </div>
+          <a class="contacto c-carta revelar" style="--retraso:.2s" data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-carta"/></svg><span><strong data-i18n="menu.cta">Ver carta</strong><small data-i18n="contact.menu">En 5 idiomas</small></span>
+          </a>
+        </div>
+        <!-- Horarios: los textos están en I18N (contact.h1.d recepción, contact.h2.d cafetería). -->
+        <div class="horarios">
+          <div class="horario card revelar"><svg class="icono" aria-hidden="true"><use href="#i-reloj"/></svg>
+            <div><h3 data-i18n="contact.h1.t">Recepción</h3><p data-i18n="contact.h1.d">Todos los días · 7:00 a. m. – 9:00 p. m. Check-in desde las 2:00 p. m.; check-out hasta las 11:00 a. m.</p></div>
+          </div>
+          <div class="horario card revelar" style="--retraso:.1s"><svg class="icono" aria-hidden="true"><use href="#i-cafe"/></svg>
+            <div><h3 data-i18n="contact.h2.t">Cafetería</h3><p data-i18n="contact.h2.d">Lunes a viernes · 10:00 a. m. – 7:00 p. m.
+Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 9. FOOTER ============ -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-fila">
+        <div>
+          <a class="marca" href="#inicio"><img src="img/logo.svg" alt="" width="40" height="40"><span>El Regalo<small>Hostal &amp; Cafetería</small></span></a>
+          <p style="margin-top:1rem;max-width:22rem" data-i18n="footer.about">Hostal y cafetería en la Vereda Palestina, Salento, Quindío. Café, montaña y buena gente.</p>
+        </div>
+        <nav aria-labelledby="pie-enlaces">
+          <h2 id="pie-enlaces" data-i18n="footer.links">Enlaces rápidos</h2>
+          <ul>
+            <li><a href="#habitaciones" data-i18n="nav.rooms">Habitaciones</a></li>
+            <li><a href="#servicios" data-i18n="nav.services">Servicios</a></li>
+            <li><a href="#galeria" data-i18n="nav.gallery">Galería</a></li>
+            <li><a href="#ubicacion" data-i18n="nav.location">Ubicación</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h2 data-i18n="footer.follow">Síguenos</h2>
+          <ul>
+            <li><a data-link="whatsapp" href="https://wa.me/573001234567" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a data-link="facebook" href="https://facebook.com/elregalo.salento" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener" data-i18n="menu.cta">Ver carta</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="pie-legal">© <span id="anio">2026</span> El Regalo · Hostal &amp; Cafetería. <span data-i18n="footer.rights">Todos los derechos reservados.</span></p>
+    </div>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp (visible en todas las secciones). -->
+  <a class="wa-flotante" data-link="whatsapp" href="https://wa.me/573001234567" target="_blank" rel="noopener"
+     aria-label="Escríbenos por WhatsApp" data-i18n-attr="aria-label:cta.whatsapp">
+    <svg class="icono" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+  </a>
+
+  <script>
+    /**
+     * Comportamiento de la landing: idiomas, enlaces de contacto, menú, carruseles,
+     * galería con lightbox y animaciones al hacer scroll. JavaScript sin dependencias.
+     **/
+
+    /* =========================================================
+       CONFIGURACIÓN — REEMPLAZA ESTOS DATOS POR LOS REALES
+       ========================================================= */
+    const CONFIG = {
+      // [NÚMERO] WhatsApp en formato internacional, solo dígitos (57 + celular).
+      whatsapp: '573001234567',
+      // Teléfonos para llamar: número internacional y cómo se muestra. Puedes poner uno o varios.
+      telefonos: [
+        { numero: '+573148613948', visible: '314 861 3948' },
+        { numero: '+573127908437', visible: '312 790 8437' },
+      ],
+      // Usuario de Instagram, sin @.
+      instagram: 'hostal_elregalo',
+      // Página de Facebook (lo que va después de facebook.com/).
+      facebook: 'elregalo.salento',
+      // Carta publicada por QR Regalo (GitHub Pages). Abre el PDF en el idioma elegido aquí.
+      carta: 'https://mrzleviatan.github.io/carta-el-regalo/',
+      // Idiomas en los que está publicada la carta (los mismos activos en QR Regalo).
+      cartaIdiomas: ['es', 'en', 'fr', 'de', 'pt'],
+    };
+
+    /* =========================================================
+       HABITACIONES — AQUÍ SE CONFIGURAN TODAS
+       Cada { … } es una tarjeta, en el orden en que aparecen. Para agregar
+       una habitación copia un bloque completo; para quitarla, bórralo.
+       - fotos: rutas de las fotos (WebP 800×600, 4:3) en img/habitaciones/.
+                El carrusel muestra tantas como pongas (1 o más).
+       - personas: capacidad máxima (número).
+       - banoPrivado: true = "Baño privado", false = "Baño compartido".
+       - es / en / fr / de / pt: textos en cada idioma. Si falta un idioma
+         o un campo, se muestra el español.
+       ========================================================= */
+    const HABITACIONES = [
+      {
+        fotos: ['img/habitaciones/barranquero-1.webp', 'img/habitaciones/barranquero-2.webp', 'img/habitaciones/barranquero-3.webp'],
+        personas: 4,
+        banoPrivado: true,
+        es: { tipo: 'Habitación privada', nombre: 'Habitación Barranquero', camas: 'Cuádruple (dos camas dobles)',
+              descripcion: 'Dos camas dobles, ventana con cortinas hacia el jardín y baño privado con ducha. Ideal para amigos o una familia pequeña.' },
+        en: { tipo: 'Private room', nombre: 'Barranquero Room', camas: 'Quadruple (two double beds)',
+              descripcion: 'Two double beds, a curtained window over the garden and a private bathroom with shower. Ideal for friends or a small family.' },
+        fr: { tipo: 'Chambre privée', nombre: 'Chambre Barranquero', camas: 'Quadruple (deux lits doubles)',
+              descripcion: 'Deux lits doubles, une fenêtre à rideaux sur le jardin et une salle de bain privée avec douche. Idéale pour des amis ou une petite famille.' },
+        de: { tipo: 'Privatzimmer', nombre: 'Zimmer Barranquero', camas: 'Vierbettzimmer (zwei Doppelbetten)',
+              descripcion: 'Zwei Doppelbetten, ein Fenster mit Vorhängen zum Garten und ein eigenes Bad mit Dusche. Ideal für Freunde oder eine kleine Familie.' },
+        pt: { tipo: 'Quarto privativo', nombre: 'Quarto Barranquero', camas: 'Quádruplo (duas camas de casal)',
+              descripcion: 'Duas camas de casal, janela com cortinas para o jardim e banheiro privativo com chuveiro. Ideal para amigos ou uma família pequena.' },
+      },
+      {
+        fotos: ['img/habitaciones/cafetal-1.webp', 'img/habitaciones/cafetal-4.webp', 'img/habitaciones/cafetal-2.webp', 'img/habitaciones/cafetal-3.webp'],
+        personas: 2,
+        banoPrivado: true,
+        es: { tipo: 'Habitación privada', nombre: 'Habitación Cafetal', camas: 'Cama doble',
+              descripcion: 'Cama doble de madera, puerta corrediza de vidrio y baño privado. Perfecta para parejas o para quien busca un descanso tranquilo.' },
+        en: { tipo: 'Private room', nombre: 'Cafetal Room', camas: 'Double bed',
+              descripcion: 'Wooden double bed, sliding glass door and private bathroom. Perfect for couples or anyone looking for a quiet rest.' },
+        fr: { tipo: 'Chambre privée', nombre: 'Chambre Cafetal', camas: 'Lit double',
+              descripcion: 'Lit double en bois, porte coulissante vitrée et salle de bain privée. Parfaite pour les couples ou pour un repos au calme.' },
+        de: { tipo: 'Privatzimmer', nombre: 'Zimmer Cafetal', camas: 'Doppelbett',
+              descripcion: 'Doppelbett aus Holz, gläserne Schiebetür und eigenes Bad. Perfekt für Paare oder alle, die Ruhe suchen.' },
+        pt: { tipo: 'Quarto privativo', nombre: 'Quarto Cafetal', camas: 'Cama de casal',
+              descripcion: 'Cama de casal de madeira, porta de vidro de correr e banheiro privativo. Perfeito para casais ou para quem busca descanso tranquilo.' },
+      },
+      {
+        fotos: ['img/habitaciones/palma-2.webp', 'img/habitaciones/palma-3.webp'],
+        personas: 3,
+        banoPrivado: true,
+        es: { tipo: 'Habitación privada', nombre: 'Habitación Palma de Cera', camas: 'Doble + sencilla',
+              descripcion: 'Luminosa y con vista al bosque, con cama doble y cama sencilla. Para viajar en familia o con amigos.' },
+        en: { tipo: 'Private room', nombre: 'Wax Palm Room', camas: 'Double + single',
+              descripcion: 'Bright, with forest views, a double bed and a single bed. For travelling with family or friends.' },
+        fr: { tipo: 'Chambre privée', nombre: 'Chambre Palmier de cire', camas: 'Double + simple',
+              descripcion: 'Lumineuse, avec vue sur la forêt, un lit double et un lit simple. Pour voyager en famille ou entre amis.' },
+        de: { tipo: 'Privatzimmer', nombre: 'Zimmer Wachspalme', camas: 'Doppel + Einzel',
+              descripcion: 'Hell, mit Blick auf den Wald, einem Doppelbett und einem Einzelbett. Für Reisen mit Familie oder Freunden.' },
+        pt: { tipo: 'Quarto privativo', nombre: 'Quarto Palma-de-cera', camas: 'Casal + solteiro',
+              descripcion: 'Iluminado e com vista para a mata, com cama de casal e cama de solteiro. Para viajar em família ou com amigos.' },
+      },
+    ];
+
+    /* =========================================================
+       TEXTOS POR IDIOMA
+       Cada clave corresponde a un data-i18n del HTML. Si falta una
+       traducción se muestra el español (como hace la carta por QR).
+       ========================================================= */
+    const I18N = {
+      es: {
+        'meta.title': 'El Regalo · Hostal & Cafetería en Salento, Quindío',
+        'meta.desc': 'Hostal y cafetería entre cafetales en la Vereda Palestina, Salento (Quindío). Habitaciones privadas con baño, café de origen y vista a las montañas. Escríbenos por WhatsApp.',
+        'wa.msg': 'Hola, quiero información sobre el hostal',
+        'wa.room': 'Hola, quiero consultar disponibilidad de la habitación: ',
+        'a11y.skip': 'Saltar al contenido', 'a11y.nav': 'Principal', 'a11y.lang': 'Cambiar idioma',
+        'a11y.menu': 'Abrir menú', 'a11y.menuClose': 'Cerrar menú', 'a11y.down': 'Bajar a Sobre nosotros',
+        'a11y.lightbox': 'Foto ampliada', 'a11y.close': 'Cerrar', 'a11y.prev': 'Foto anterior', 'a11y.next': 'Foto siguiente',
+        'a11y.slide': 'Ir a la foto', 'a11y.of': 'de',
+        'nav.about': 'Nosotros', 'nav.rooms': 'Habitaciones', 'nav.services': 'Servicios', 'nav.gallery': 'Galería',
+        'nav.menu': 'Carta', 'nav.location': 'Ubicación', 'nav.contact': 'Contacto',
+        'cta.whatsapp': 'Escríbenos por WhatsApp',
+        'img.hero': "La casa de El Regalo entre la vegetación, junto al camino de la vereda",
+        'img.logo': 'Logo de El Regalo: barranquero en una rama de café',
+        'img.about': "Barra de la cafetería con el letrero Hostal y Cafetería El Regalo",
+        'img.mural': 'Mural de un barranquero entre hojas y frutos de café pintado en El Regalo',
+        'img.menu': "Taza de café y porción de torta servidas en la cafetería",
+        'hero.kicker': 'Salento · Quindío · Vereda Palestina',
+        'hero.slogan': "Descanso, café y naturaleza en armonía.",
+        'hero.rooms': 'Ver habitaciones',
+        'about.kicker': 'Sobre nosotros',
+        'about.title': "Un refugio entre paisajes y aves para vivir experiencias inolvidables",
+        'about.p1': 'El Regalo nació en una finca de la Vereda Palestina, a las afueras de Salento, rodeada de cafetales, guaduas y montañas. Aquí el tiempo va más despacio: el café se toma con calma y las historias de viaje se comparten en la terraza.',
+        'about.p2': 'Somos un hostal familiar y una cafetería de comida típica. Te recibimos como en casa, te contamos los mejores planes del Quindío —el Valle de Cocora, las fincas cafeteras, los miradores— y te esperamos con un tinto recién colado cuando vuelvas.',
+        'about.f1': 'Entre cafetales', 'about.f2': 'Vista a la montaña', 'about.f3': 'Ambiente familiar',
+        'rooms.kicker': 'Dónde dormir', 'rooms.title': 'Habitaciones',
+        'rooms.intro': "Habitaciones privadas, limpias y luminosas, con baño propio, cobijas gruesas para las noches frescas de montaña y ventanas hacia el verde.",
+        'rooms.shared': 'Baño compartido', 'rooms.private': 'Baño privado', 'rooms.ask': 'Consultar disponibilidad',
+        'rooms.note': 'Tarifas y disponibilidad por WhatsApp: te respondemos rápido.',
+        'rooms.photo': "foto",
+        'rooms.photos': "Fotos de",
+        'rooms.cap': "Hasta {n} personas",
+        'services.kicker': 'Comodidades', 'services.title': 'Todo lo que necesitas',
+        'services.intro': 'Lo básico bien hecho y unos cuantos detalles que hacen la diferencia.',
+        'services.s1.t': 'WiFi gratis', 'services.s1.d': 'En habitaciones y zonas comunes.',
+        'services.s2.t': 'Cafetería', 'services.s2.d': 'Café de la región y comida típica.',
+        'services.s3.t': 'Desayuno', 'services.s3.d': 'Un buen desayuno típico para empezar el día.',
+        'services.s6.t': 'Zona común', 'services.s6.d': 'Hamacas, juegos y buena charla.',
+        'services.s7.t': 'Terraza con vista', 'services.s7.d': 'Atardeceres sobre las montañas.',
+        'services.s8.t': 'Agua caliente', 'services.s8.d': 'Para las mañanas frescas de montaña.',
+        'gallery.kicker': 'Galería', 'gallery.title': 'Así se vive El Regalo', 'gallery.intro': 'Toca una foto para verla en grande.',
+        'gallery.g1': "Fachada amarilla de El Regalo con buganvilias", 'gallery.g2': "Barra de la cafetería con el letrero Hostal y Cafetería El Regalo",
+        'gallery.g3': "Terraza con comedor rodeada de vegetación", 'gallery.g4': "Hamaca y sillas de estiba de colores en la terraza",
+        'gallery.g5': "Sala común con sofá, televisor y mesa de madera", 'gallery.g6': "Rincón de descanso con sofás de estiba y mesa de tronco",
+        'gallery.g7': "Jeep Willys azul frente al hostal en la vereda", 'gallery.g8': "Cocina equipada con barra de madera y nevera",
+        'gallery.g9': "Café frío y porción de torta en una mesa de madera", 'gallery.g10': "Taza de café sobre una mesa de tronco",
+        'gallery.g11': "El hostal iluminado de noche entre los árboles", 'gallery.g12': "Letrero de Hostal y Cafetería El Regalo entre el bosque",
+        'menu.kicker': 'Cafetería', 'menu.title': 'Comida típica y café de la vereda',
+        'menu.intro': 'Empanadas tradicionales, dedos de queso con bocadillo y hawaianos, variedad de cafés y el café de la casa. ¡Abierto a todo el público! No necesitas estar hospedado para venir a disfrutar con nosotros.',        
+        'menu.cta': 'Ver carta', 'menu.langs': 'Idiomas de la carta',
+        'location.kicker': 'Ubicación', 'location.title': 'Cómo llegar',
+        'location.intro': 'Estamos en el campo, a pocos minutos del pueblo de Salento: lo bastante cerca para todo y lo bastante lejos para descansar.',
+        'location.map': 'Mapa de El Regalo en la Vereda Palestina, Salento',
+        'location.addressTitle': 'Dirección', 'location.address': "Vereda Palestina, vía a la Finca El Ocaso · Salento, Quindío, Colombia",
+        'location.s1.t': 'Llega a Salento', 'location.s1.d': 'Buses directos desde Armenia y Pereira llegan a la terminal del pueblo.',
+        'location.s2.t': "Toma el Willys a la Finca El Ocaso", 'location.s2.d': "Desde la plaza principal salen los Willys hacia la Finca El Ocaso. Pide que te dejen en El Regalo: estamos sobre esa misma vía.",
+        'location.s3.t': 'O ven caminando', 'location.s3.d': 'Es un paseo bonito entre cafetales. Escríbenos y te enviamos la ubicación exacta.',
+        'location.cta': 'Abrir en Google Maps',
+        'contact.kicker': 'Contacto', 'contact.title': '¿Hablamos?',
+        'contact.intro': 'Pregúntanos por disponibilidad, tarifas, planes o cómo llegar. Respondemos en español e inglés.',
+        'contact.wa': 'La forma más rápida', 'contact.fb': 'Fotos y novedades', 'contact.phone': 'Llámanos', 'contact.menu': 'En 5 idiomas',
+        'contact.h1.t': 'Recepción', 'contact.h1.d': 'Todos los días · 7:00 a. m. – 9:00 p. m. Check-in desde las 2:00 p. m.; check-out hasta las 11:00 a. m.',
+        'contact.h2.t': 'Cafetería', 'contact.h2.d': "Lunes a viernes · 10:00 a. m. – 7:00 p. m.\nFines de semana y festivos · 9:00 a. m. – 10:00 p. m.",
+        'footer.about': 'Hostal y cafetería en la Vereda Palestina, Salento, Quindío. Café, montaña y buena gente.',
+        'footer.links': 'Enlaces rápidos', 'footer.follow': 'Síguenos', 'footer.rights': 'Todos los derechos reservados.',
+      },
+
+      en: {
+        'meta.title': 'El Regalo · Hostal & Cafetería in Salento, Quindío',
+        'meta.desc': 'Hostel and café among coffee farms in Vereda Palestina, Salento (Quindío, Colombia). Private rooms with bathroom, local coffee and mountain views. Message us on WhatsApp.',
+        'wa.msg': 'Hi! I would like some information about the hostel',
+        'wa.room': 'Hi! I would like to check availability for this room: ',
+        'a11y.skip': 'Skip to content', 'a11y.nav': 'Main', 'a11y.lang': 'Change language',
+        'a11y.menu': 'Open menu', 'a11y.menuClose': 'Close menu', 'a11y.down': 'Scroll to About us',
+        'a11y.lightbox': 'Enlarged photo', 'a11y.close': 'Close', 'a11y.prev': 'Previous photo', 'a11y.next': 'Next photo',
+        'a11y.slide': 'Go to photo', 'a11y.of': 'of',
+        'nav.about': 'About', 'nav.rooms': 'Rooms', 'nav.services': 'Amenities', 'nav.gallery': 'Gallery',
+        'nav.menu': 'Menu', 'nav.location': 'Location', 'nav.contact': 'Contact',
+        'cta.whatsapp': 'Message us on WhatsApp',
+        'img.hero': "The El Regalo house among the greenery, next to the country road",
+        'img.logo': 'El Regalo logo: a motmot bird on a coffee branch',
+        'img.about': "Café counter with the Hostal y Cafetería El Regalo sign",
+        'img.mural': 'Mural of a motmot bird among coffee leaves and cherries painted at El Regalo',
+        'img.menu': "Cup of coffee and a slice of cake served at the café",
+        'hero.kicker': 'Salento · Quindío · Vereda Palestina',
+        'hero.slogan': "Rest, coffee and nature in harmony.",
+        'hero.rooms': 'See rooms',
+        'about.kicker': 'About us',
+        'about.title': "A retreat among landscapes and birds for unforgettable experiences",
+        'about.p1': 'El Regalo was born on a farm in Vereda Palestina, just outside Salento, surrounded by coffee plants, bamboo and mountains. Time slows down here: coffee is enjoyed slowly and travel stories are shared on the terrace.',
+        'about.p2': 'We are a family-run hostel and a traditional Colombian café. We welcome you like family, share the best things to do in Quindío —Cocora Valley, coffee farms, viewpoints— and wait for you with a fresh cup of coffee when you get back.',
+        'about.f1': 'Among coffee farms', 'about.f2': 'Mountain views', 'about.f3': 'Family atmosphere',
+        'rooms.kicker': 'Where to sleep', 'rooms.title': 'Rooms',
+        'rooms.intro': "Clean, bright private rooms with their own bathroom, thick blankets for chilly mountain nights and windows facing the green.",
+        'rooms.shared': 'Shared bathroom', 'rooms.private': 'Private bathroom', 'rooms.ask': 'Check availability',
+        'rooms.note': 'Rates and availability on WhatsApp: we reply fast.',
+        'rooms.photo': "photo",
+        'rooms.photos': "Photos of",
+        'rooms.cap': "Up to {n} guests",
+        'services.kicker': 'Amenities', 'services.title': 'Everything you need',
+        'services.intro': 'The basics done right, plus a few touches that make the difference.',
+        'services.s1.t': 'Free WiFi', 'services.s1.d': 'In rooms and common areas.',
+        'services.s2.t': 'Café', 'services.s2.d': 'Local coffee and traditional food.',
+        'services.s3.t': 'Breakfast', 'services.s3.d': 'A hearty traditional breakfast to start your day.',
+        'services.s6.t': 'Common area', 'services.s6.d': 'Hammocks, games and good chats.',
+        'services.s7.t': 'Terrace with a view', 'services.s7.d': 'Sunsets over the mountains.',
+        'services.s8.t': 'Hot water', 'services.s8.d': 'For those fresh mountain mornings.',
+        'gallery.kicker': 'Gallery', 'gallery.title': 'Life at El Regalo', 'gallery.intro': 'Tap a photo to enlarge it.',
+        'gallery.g1': "Yellow façade of El Regalo with bougainvillea", 'gallery.g2': "Café counter with the Hostal y Cafetería El Regalo sign",
+        'gallery.g3': "Terrace dining area surrounded by greenery", 'gallery.g4': "Hammock and colourful pallet seats on the terrace",
+        'gallery.g5': "Common lounge with sofa, TV and wooden table", 'gallery.g6': "Chill-out corner with pallet sofas and a tree-trunk table",
+        'gallery.g7': "Blue Willys jeep in front of the hostel", 'gallery.g8': "Equipped kitchen with wooden counter and fridge",
+        'gallery.g9': "Iced coffee and a slice of cake on a wooden table", 'gallery.g10': "Cup of coffee on a tree-trunk table",
+        'gallery.g11': "The hostel lit up at night among the trees", 'gallery.g12': "Hostal y Cafetería El Regalo sign in the forest",
+        'menu.kicker': 'Café', 'menu.title': 'Traditional food and coffee from the farm',
+        'menu.intro': 'Traditional empanadas, cheese & guava sticks, Hawaiian sticks, a variety of coffees, and our house coffee.',
+        'menu.cta': 'See menu', 'menu.langs': 'Menu languages',
+        'location.kicker': 'Location', 'location.title': 'Getting here',
+        'location.intro': 'We are in the countryside, a few minutes from Salento town: close enough to everything, far enough to truly rest.',
+        'location.map': 'Map of El Regalo in Vereda Palestina, Salento',
+        'location.addressTitle': 'Address', 'location.address': "Vereda Palestina, road to Finca El Ocaso · Salento, Quindío, Colombia",
+        'location.s1.t': 'Get to Salento', 'location.s1.d': 'Direct buses from Armenia and Pereira arrive at the town terminal.',
+        'location.s2.t': "Take the Willys to Finca El Ocaso", 'location.s2.d': "Willys jeeps to Finca El Ocaso leave from the main square. Ask to be dropped off at El Regalo: we are right on that road.",
+        'location.s3.t': 'Or walk', 'location.s3.d': 'It is a lovely walk among coffee plants. Message us and we will send you the exact location.',
+        'location.cta': 'Open in Google Maps',
+        'contact.kicker': 'Contact', 'contact.title': "Let's talk",
+        'contact.intro': 'Ask us about availability, rates, activities or how to get here. We reply in Spanish and English.',
+        'contact.wa': 'The fastest way', 'contact.fb': 'Photos and news', 'contact.phone': 'Call us', 'contact.menu': 'In 5 languages',
+        'contact.h1.t': 'Reception', 'contact.h1.d': 'Every day · 7:00 a.m. – 9:00 p.m. Check-in from 2:00 p.m.; check-out until 11:00 a.m.',
+        'contact.h2.t': 'Café', 'contact.h2.d': "Monday to Friday · 10:00 a.m. – 7:00 p.m.\nWeekends and holidays · 9:00 a.m. – 10:00 p.m.",
+        'footer.about': 'Hostel and café in Vereda Palestina, Salento, Quindío. Coffee, mountains and good people.',
+        'footer.links': 'Quick links', 'footer.follow': 'Follow us', 'footer.rights': 'All rights reserved.',
+      },
+
+      fr: {
+        'meta.title': 'El Regalo · Hostal & Cafetería à Salento, Quindío',
+        'meta.desc': 'Auberge et café au milieu des caféiers, Vereda Palestina, Salento (Quindío, Colombie). Chambres privées avec salle de bain, café local et vue sur les montagnes. Écrivez-nous sur WhatsApp.',
+        'wa.msg': "Bonjour ! J'aimerais des informations sur l'auberge",
+        'wa.room': "Bonjour ! J'aimerais connaître la disponibilité de la chambre : ",
+        'a11y.skip': 'Aller au contenu', 'a11y.nav': 'Principal', 'a11y.lang': 'Changer de langue',
+        'a11y.menu': 'Ouvrir le menu', 'a11y.menuClose': 'Fermer le menu', 'a11y.down': 'Descendre à À propos',
+        'a11y.lightbox': 'Photo agrandie', 'a11y.close': 'Fermer', 'a11y.prev': 'Photo précédente', 'a11y.next': 'Photo suivante',
+        'a11y.slide': 'Aller à la photo', 'a11y.of': 'sur',
+        'nav.about': 'À propos', 'nav.rooms': 'Chambres', 'nav.services': 'Services', 'nav.gallery': 'Galerie',
+        'nav.menu': 'Carte', 'nav.location': 'Accès', 'nav.contact': 'Contact',
+        'cta.whatsapp': 'Écrivez-nous sur WhatsApp',
+        'img.hero': "La maison d'El Regalo dans la verdure, au bord du chemin",
+        'img.logo': "Logo d'El Regalo : un motmot sur une branche de caféier",
+        'img.about': "Comptoir du café avec le panneau Hostal y Cafetería El Regalo",
+        'img.mural': 'Fresque d’un motmot parmi des feuilles et cerises de café peinte à El Regalo',
+        'img.menu': "Tasse de café et part de gâteau servies au café",
+        'hero.kicker': 'Salento · Quindío · Vereda Palestina',
+        'hero.slogan': "Repos, café et nature en harmonie.",
+        'hero.rooms': 'Voir les chambres',
+        'about.kicker': 'À propos',
+        'about.title': "Un refuge entre paysages et oiseaux pour vivre des expériences inoubliables",
+        'about.p1': 'El Regalo est né dans une ferme de la Vereda Palestina, aux portes de Salento, entourée de caféiers, de bambous et de montagnes. Ici, le temps ralentit : on savoure son café et on partage ses récits de voyage sur la terrasse.',
+        'about.p2': 'Nous sommes une auberge familiale et un café de cuisine traditionnelle. Nous vous accueillons comme à la maison, vous conseillons les meilleures sorties du Quindío —vallée de Cocora, fermes de café, belvédères— et vous attendons avec un café fraîchement préparé à votre retour.',
+        'about.f1': 'Parmi les caféiers', 'about.f2': 'Vue sur la montagne', 'about.f3': 'Ambiance familiale',
+        'rooms.kicker': 'Où dormir', 'rooms.title': 'Chambres',
+        'rooms.intro': "Des chambres privées, propres et lumineuses, avec salle de bain, couvertures épaisses pour les nuits fraîches et fenêtres sur la verdure.",
+        'rooms.shared': 'Salle de bain partagée', 'rooms.private': 'Salle de bain privée', 'rooms.ask': 'Voir les disponibilités',
+        'rooms.note': 'Tarifs et disponibilités sur WhatsApp : nous répondons vite.',
+        'rooms.photo': "photo",
+        'rooms.photos': "Photos de",
+        'rooms.cap': "Jusqu'à {n} personnes",
+        'services.kicker': 'Services', 'services.title': 'Tout ce qu’il vous faut',
+        'services.intro': 'L’essentiel bien fait, et quelques détails qui font la différence.',
+        'services.s1.t': 'WiFi gratuit', 'services.s1.d': 'Dans les chambres et les espaces communs.',
+        'services.s2.t': 'Café-restaurant', 'services.s2.d': 'Café de la région et cuisine typique.',
+        'services.s3.t': 'Petit-déjeuner', 'services.s3.d': 'Un bon petit-déjeuner typique pour bien commencer la journée.',
+        'services.s6.t': 'Espace commun', 'services.s6.d': 'Hamacs, jeux et bonnes discussions.',
+        'services.s7.t': 'Terrasse avec vue', 'services.s7.d': 'Couchers de soleil sur les montagnes.',
+        'services.s8.t': 'Eau chaude', 'services.s8.d': 'Pour les matins frais en montagne.',
+        'gallery.kicker': 'Galerie', 'gallery.title': 'La vie à El Regalo', 'gallery.intro': 'Touchez une photo pour l’agrandir.',
+        'gallery.g1': "Façade jaune d'El Regalo avec bougainvilliers", 'gallery.g2': "Comptoir du café avec le panneau Hostal y Cafetería El Regalo",
+        'gallery.g3': "Terrasse avec salle à manger entourée de verdure", 'gallery.g4': "Hamac et sièges colorés en palettes sur la terrasse",
+        'gallery.g5': "Salon commun avec canapé, télévision et table en bois", 'gallery.g6': "Coin détente avec canapés en palettes et table en tronc",
+        'gallery.g7': "Jeep Willys bleue devant l'auberge", 'gallery.g8': "Cuisine équipée avec comptoir en bois et réfrigérateur",
+        'gallery.g9': "Café glacé et part de gâteau sur une table en bois", 'gallery.g10': "Tasse de café sur une table en tronc",
+        'gallery.g11': "L'auberge illuminée la nuit entre les arbres", 'gallery.g12': "Panneau Hostal y Cafetería El Regalo dans la forêt",
+        'menu.kicker': 'Café', 'menu.title': 'Cuisine typique et café de la ferme',
+        'menu.intro': 'Empanadas traditionnelles, bâtonnets de fromage à la goyave et hawaïens, variété de cafés et le café de la maison.',
+        'menu.cta': 'Voir la carte', 'menu.langs': 'Langues de la carte',
+        'location.kicker': 'Accès', 'location.title': 'Comment venir',
+        'location.intro': 'Nous sommes à la campagne, à quelques minutes du village de Salento : assez près de tout, assez loin pour vraiment se reposer.',
+        'location.map': "Carte d'El Regalo à Vereda Palestina, Salento",
+        'location.addressTitle': 'Adresse', 'location.address': "Vereda Palestina, route de la Finca El Ocaso · Salento, Quindío, Colombie",
+        'location.s1.t': 'Arrivez à Salento', 'location.s1.d': 'Des bus directs depuis Armenia et Pereira arrivent au terminal du village.',
+        'location.s2.t': "Prenez la jeep Willys vers la Finca El Ocaso", 'location.s2.d': "Les jeeps Willys vers la Finca El Ocaso partent de la place principale. Demandez à descendre à El Regalo : nous sommes sur cette même route.",
+        'location.s3.t': 'Ou venez à pied', 'location.s3.d': 'Une belle balade parmi les caféiers. Écrivez-nous et nous vous enverrons la position exacte.',
+        'location.cta': 'Ouvrir dans Google Maps',
+        'contact.kicker': 'Contact', 'contact.title': 'On en parle ?',
+        'contact.intro': 'Demandez-nous les disponibilités, les tarifs, les activités ou l’itinéraire. Nous répondons en espagnol et en anglais.',
+        'contact.wa': 'Le plus rapide', 'contact.fb': 'Photos et actualités', 'contact.phone': 'Appelez-nous', 'contact.menu': 'En 5 langues',
+        'contact.h1.t': 'Réception', 'contact.h1.d': 'Tous les jours · 7 h – 21 h. Arrivée dès 14 h ; départ jusqu’à 11 h.',
+        'contact.h2.t': 'Café', 'contact.h2.d': "Du lundi au vendredi · 10 h – 19 h\nWeek-ends et jours fériés · 9 h – 22 h",
+        'footer.about': 'Auberge et café à Vereda Palestina, Salento, Quindío. Café, montagnes et bonne compagnie.',
+        'footer.links': 'Liens rapides', 'footer.follow': 'Suivez-nous', 'footer.rights': 'Tous droits réservés.',
+      },
+
+      de: {
+        'meta.title': 'El Regalo · Hostal & Cafetería in Salento, Quindío',
+        'meta.desc': 'Hostel und Café zwischen Kaffeefeldern in der Vereda Palestina, Salento (Quindío, Kolumbien). Privatzimmer mit eigenem Bad, lokaler Kaffee und Bergblick. Schreib uns auf WhatsApp.',
+        'wa.msg': 'Hallo! Ich hätte gern Informationen über das Hostel',
+        'wa.room': 'Hallo! Ich möchte die Verfügbarkeit dieses Zimmers anfragen: ',
+        'a11y.skip': 'Zum Inhalt springen', 'a11y.nav': 'Hauptmenü', 'a11y.lang': 'Sprache ändern',
+        'a11y.menu': 'Menü öffnen', 'a11y.menuClose': 'Menü schließen', 'a11y.down': 'Zu Über uns scrollen',
+        'a11y.lightbox': 'Vergrößertes Foto', 'a11y.close': 'Schließen', 'a11y.prev': 'Vorheriges Foto', 'a11y.next': 'Nächstes Foto',
+        'a11y.slide': 'Zu Foto', 'a11y.of': 'von',
+        'nav.about': 'Über uns', 'nav.rooms': 'Zimmer', 'nav.services': 'Ausstattung', 'nav.gallery': 'Galerie',
+        'nav.menu': 'Speisekarte', 'nav.location': 'Anfahrt', 'nav.contact': 'Kontakt',
+        'cta.whatsapp': 'Schreib uns auf WhatsApp',
+        'img.hero': "Das Haus von El Regalo im Grünen, am Weg der Vereda",
+        'img.logo': 'Logo von El Regalo: ein Sägeracke auf einem Kaffeezweig',
+        'img.about': "Café-Theke mit dem Schild Hostal y Cafetería El Regalo",
+        'img.mural': 'Wandbild eines Sägeracken zwischen Kaffeeblättern und -kirschen bei El Regalo',
+        'img.menu': "Tasse Kaffee und ein Stück Kuchen im Café",
+        'hero.kicker': 'Salento · Quindío · Vereda Palestina',
+        'hero.slogan': "Erholung, Kaffee und Natur im Einklang.",
+        'hero.rooms': 'Zimmer ansehen',
+        'about.kicker': 'Über uns',
+        'about.title': "Ein Rückzugsort zwischen Landschaften und Vögeln für unvergessliche Erlebnisse",
+        'about.p1': 'El Regalo entstand auf einer Finca in der Vereda Palestina, am Rand von Salento, umgeben von Kaffeesträuchern, Bambus und Bergen. Hier vergeht die Zeit langsamer: Kaffee wird in Ruhe getrunken und Reisegeschichten werden auf der Terrasse geteilt.',
+        'about.p2': 'Wir sind ein familiengeführtes Hostel und ein Café mit traditioneller Küche. Wir empfangen dich wie zu Hause, verraten dir die besten Ausflüge im Quindío —Cocora-Tal, Kaffeefarmen, Aussichtspunkte— und warten mit frisch gebrühtem Kaffee auf dich, wenn du zurückkommst.',
+        'about.f1': 'Zwischen Kaffeefeldern', 'about.f2': 'Bergblick', 'about.f3': 'Familiäre Atmosphäre',
+        'rooms.kicker': 'Übernachten', 'rooms.title': 'Zimmer',
+        'rooms.intro': "Saubere, helle Privatzimmer mit eigenem Bad, dicken Decken für kühle Bergnächte und Fenstern ins Grüne.",
+        'rooms.shared': 'Gemeinschaftsbad', 'rooms.private': 'Eigenes Bad', 'rooms.ask': 'Verfügbarkeit anfragen',
+        'rooms.note': 'Preise und Verfügbarkeit per WhatsApp: Wir antworten schnell.',
+        'rooms.photo': "Foto",
+        'rooms.photos': "Fotos von",
+        'rooms.cap': "Bis zu {n} Personen",
+        'services.kicker': 'Ausstattung', 'services.title': 'Alles, was du brauchst',
+        'services.intro': 'Das Wichtigste gut gemacht und ein paar Details, die den Unterschied machen.',
+        'services.s1.t': 'Kostenloses WLAN', 'services.s1.d': 'In Zimmern und Gemeinschaftsbereichen.',
+        'services.s2.t': 'Café', 'services.s2.d': 'Kaffee aus der Region und typisches Essen.',
+        'services.s3.t': 'Frühstück', 'services.s3.d': 'Ein gutes typisches Frühstück für einen starken Start in den Tag.',
+        'services.s6.t': 'Gemeinschaftsbereich', 'services.s6.d': 'Hängematten, Spiele und gute Gespräche.',
+        'services.s7.t': 'Terrasse mit Aussicht', 'services.s7.d': 'Sonnenuntergänge über den Bergen.',
+        'services.s8.t': 'Warmwasser', 'services.s8.d': 'Für frische Bergmorgen.',
+        'gallery.kicker': 'Galerie', 'gallery.title': 'So lebt man bei El Regalo', 'gallery.intro': 'Tippe auf ein Foto, um es zu vergrößern.',
+        'gallery.g1': "Gelbe Fassade von El Regalo mit Bougainvillea", 'gallery.g2': "Café-Theke mit dem Schild Hostal y Cafetería El Regalo",
+        'gallery.g3': "Terrasse mit Essbereich im Grünen", 'gallery.g4': "Hängematte und bunte Palettensitze auf der Terrasse",
+        'gallery.g5': "Gemeinschaftsraum mit Sofa, Fernseher und Holztisch", 'gallery.g6': "Ruheecke mit Palettensofas und Baumstammtisch",
+        'gallery.g7': "Blauer Willys-Jeep vor dem Hostel", 'gallery.g8': "Ausgestattete Küche mit Holztheke und Kühlschrank",
+        'gallery.g9': "Eiskaffee und ein Stück Kuchen auf einem Holztisch", 'gallery.g10': "Tasse Kaffee auf einem Baumstammtisch",
+        'gallery.g11': "Das Hostel nachts beleuchtet zwischen den Bäumen", 'gallery.g12': "Schild Hostal y Cafetería El Regalo im Wald",
+        'menu.kicker': 'Café', 'menu.title': 'Typische Küche und Kaffee von der Finca',
+        'menu.intro': 'Traditionelle Empanadas, Käse-Guave-Stangen und hawaiianische Stangen, eine Vielfalt an Kaffees und unser Hauskaffee.',
+        'menu.cta': 'Speisekarte ansehen', 'menu.langs': 'Sprachen der Speisekarte',
+        'location.kicker': 'Anfahrt', 'location.title': 'So findest du uns',
+        'location.intro': 'Wir liegen auf dem Land, wenige Minuten vom Ort Salento entfernt: nah genug an allem, weit genug zum Ausruhen.',
+        'location.map': 'Karte von El Regalo in der Vereda Palestina, Salento',
+        'location.addressTitle': 'Adresse', 'location.address': "Vereda Palestina, Straße zur Finca El Ocaso · Salento, Quindío, Kolumbien",
+        'location.s1.t': 'Nach Salento kommen', 'location.s1.d': 'Direktbusse aus Armenia und Pereira halten am Busbahnhof des Ortes.',
+        'location.s2.t': "Mit dem Willys Richtung Finca El Ocaso", 'location.s2.d': "Am Hauptplatz fahren die Willys-Jeeps zur Finca El Ocaso ab. Bitte darum, bei El Regalo auszusteigen: Wir liegen direkt an dieser Straße.",
+        'location.s3.t': 'Oder zu Fuß', 'location.s3.d': 'Ein schöner Spaziergang zwischen Kaffeefeldern. Schreib uns und wir schicken dir den genauen Standort.',
+        'location.cta': 'In Google Maps öffnen',
+        'contact.kicker': 'Kontakt', 'contact.title': 'Lass uns reden',
+        'contact.intro': 'Frag uns nach Verfügbarkeit, Preisen, Ausflügen oder der Anreise. Wir antworten auf Spanisch und Englisch.',
+        'contact.wa': 'Der schnellste Weg', 'contact.fb': 'Fotos und News', 'contact.phone': 'Ruf uns an', 'contact.menu': 'In 5 Sprachen',
+        'contact.h1.t': 'Rezeption', 'contact.h1.d': 'Täglich · 7:00 – 21:00 Uhr. Check-in ab 14:00 Uhr; Check-out bis 11:00 Uhr.',
+        'contact.h2.t': 'Café', 'contact.h2.d': "Montag bis Freitag · 10:00 – 19:00 Uhr\nWochenende und Feiertage · 9:00 – 22:00 Uhr",
+        'footer.about': 'Hostel und Café in der Vereda Palestina, Salento, Quindío. Kaffee, Berge und gute Leute.',
+        'footer.links': 'Schnellzugriff', 'footer.follow': 'Folge uns', 'footer.rights': 'Alle Rechte vorbehalten.',
+      },
+
+      pt: {
+        'meta.title': 'El Regalo · Hostal & Cafetería em Salento, Quindío',
+        'meta.desc': 'Hostel e café entre cafezais na Vereda Palestina, Salento (Quindío, Colômbia). Quartos privativos com banheiro, café local e vista para as montanhas. Fale conosco pelo WhatsApp.',
+        'wa.msg': 'Olá! Gostaria de informações sobre o hostel',
+        'wa.room': 'Olá! Gostaria de consultar a disponibilidade do quarto: ',
+        'a11y.skip': 'Ir para o conteúdo', 'a11y.nav': 'Principal', 'a11y.lang': 'Mudar idioma',
+        'a11y.menu': 'Abrir menu', 'a11y.menuClose': 'Fechar menu', 'a11y.down': 'Descer para Sobre nós',
+        'a11y.lightbox': 'Foto ampliada', 'a11y.close': 'Fechar', 'a11y.prev': 'Foto anterior', 'a11y.next': 'Próxima foto',
+        'a11y.slide': 'Ir para a foto', 'a11y.of': 'de',
+        'nav.about': 'Sobre nós', 'nav.rooms': 'Quartos', 'nav.services': 'Comodidades', 'nav.gallery': 'Galeria',
+        'nav.menu': 'Cardápio', 'nav.location': 'Localização', 'nav.contact': 'Contato',
+        'cta.whatsapp': 'Fale conosco no WhatsApp',
+        'img.hero': "A casa do El Regalo no meio do verde, ao lado da estrada da vereda",
+        'img.logo': 'Logo do El Regalo: um udu-de-coroa-azul num galho de café',
+        'img.about': "Balcão do café com a placa Hostal y Cafetería El Regalo",
+        'img.mural': 'Mural de um udu-de-coroa-azul entre folhas e frutos de café pintado no El Regalo',
+        'img.menu': "Xícara de café e fatia de bolo servidas no café",
+        'hero.kicker': 'Salento · Quindío · Vereda Palestina',
+        'hero.slogan': "Descanso, café e natureza em harmonia.",
+        'hero.rooms': 'Ver quartos',
+        'about.kicker': 'Sobre nós',
+        'about.title': "Um refúgio entre paisagens e aves para viver experiências inesquecíveis",
+        'about.p1': 'O El Regalo nasceu numa fazenda da Vereda Palestina, nos arredores de Salento, cercada de cafezais, bambus e montanhas. Aqui o tempo passa devagar: o café é tomado com calma e as histórias de viagem são compartilhadas no terraço.',
+        'about.p2': 'Somos um hostel familiar e um café de comida típica. Recebemos você como em casa, contamos os melhores passeios do Quindío —Vale do Cocora, fazendas de café, mirantes— e esperamos sua volta com um café recém-passado.',
+        'about.f1': 'Entre cafezais', 'about.f2': 'Vista para a montanha', 'about.f3': 'Ambiente familiar',
+        'rooms.kicker': 'Onde dormir', 'rooms.title': 'Quartos',
+        'rooms.intro': "Quartos privativos, limpos e iluminados, com banheiro próprio, cobertores grossos para as noites frescas da montanha e janelas para o verde.",
+        'rooms.shared': 'Banheiro compartilhado', 'rooms.private': 'Banheiro privativo', 'rooms.ask': 'Consultar disponibilidade',
+        'rooms.note': 'Tarifas e disponibilidade pelo WhatsApp: respondemos rápido.',
+        'rooms.photo': "foto",
+        'rooms.photos': "Fotos do",
+        'rooms.cap': "Até {n} pessoas",
+        'services.kicker': 'Comodidades', 'services.title': 'Tudo o que você precisa',
+        'services.intro': 'O básico bem feito e alguns detalhes que fazem a diferença.',
+        'services.s1.t': 'WiFi grátis', 'services.s1.d': 'Nos quartos e áreas comuns.',
+        'services.s2.t': 'Café', 'services.s2.d': 'Café da região e comida típica.',
+        'services.s3.t': 'Café da manhã', 'services.s3.d': 'Um bom café da manhã típico para começar o dia.',
+        'services.s6.t': 'Área comum', 'services.s6.d': 'Redes, jogos e boa conversa.',
+        'services.s7.t': 'Terraço com vista', 'services.s7.d': 'Pores do sol sobre as montanhas.',
+        'services.s8.t': 'Água quente', 'services.s8.d': 'Para as manhãs frescas da montanha.',
+        'gallery.kicker': 'Galeria', 'gallery.title': 'Assim se vive no El Regalo', 'gallery.intro': 'Toque numa foto para ampliá-la.',
+        'gallery.g1': "Fachada amarela do El Regalo com buganvílias", 'gallery.g2': "Balcão do café com a placa Hostal y Cafetería El Regalo",
+        'gallery.g3': "Terraço com mesa de jantar cercado de verde", 'gallery.g4': "Rede e assentos coloridos de palete no terraço",
+        'gallery.g5': "Sala comum com sofá, TV e mesa de madeira", 'gallery.g6': "Cantinho de descanso com sofás de palete e mesa de tronco",
+        'gallery.g7': "Jipe Willys azul em frente ao hostel", 'gallery.g8': "Cozinha equipada com balcão de madeira e geladeira",
+        'gallery.g9': "Café gelado e fatia de bolo numa mesa de madeira", 'gallery.g10': "Xícara de café numa mesa de tronco",
+        'gallery.g11': "O hostel iluminado à noite entre as árvores", 'gallery.g12': "Placa do Hostal y Cafetería El Regalo na mata",
+        'menu.kicker': 'Café', 'menu.title': 'Comida típica e café da fazenda',
+        'menu.intro': 'Empanadas tradicionais, dedos de queijo com goiabada e havaianos, variedade de cafés e o café da casa.',
+        'menu.cta': 'Ver cardápio', 'menu.langs': 'Idiomas do cardápio',
+        'location.kicker': 'Localização', 'location.title': 'Como chegar',
+        'location.intro': 'Estamos no campo, a poucos minutos da cidade de Salento: perto o bastante de tudo, longe o bastante para descansar.',
+        'location.map': 'Mapa do El Regalo na Vereda Palestina, Salento',
+        'location.addressTitle': 'Endereço', 'location.address': "Vereda Palestina, estrada para a Finca El Ocaso · Salento, Quindío, Colômbia",
+        'location.s1.t': 'Chegue a Salento', 'location.s1.d': 'Ônibus diretos de Armenia e Pereira chegam ao terminal da cidade.',
+        'location.s2.t': "Pegue o Willys para a Finca El Ocaso", 'location.s2.d': "Na praça principal saem os jipes Willys para a Finca El Ocaso. Peça para descer no El Regalo: ficamos nessa mesma estrada.",
+        'location.s3.t': 'Ou venha caminhando', 'location.s3.d': 'É um passeio lindo entre cafezais. Escreva para nós e enviamos a localização exata.',
+        'location.cta': 'Abrir no Google Maps',
+        'contact.kicker': 'Contato', 'contact.title': 'Vamos conversar?',
+        'contact.intro': 'Pergunte sobre disponibilidade, tarifas, passeios ou como chegar. Respondemos em espanhol e inglês.',
+        'contact.wa': 'O jeito mais rápido', 'contact.fb': 'Fotos e novidades', 'contact.phone': 'Ligue para nós', 'contact.menu': 'Em 5 idiomas',
+        'contact.h1.t': 'Recepção', 'contact.h1.d': 'Todos os dias · 7h – 21h. Check-in a partir das 14h; check-out até as 11h.',
+        'contact.h2.t': 'Café', 'contact.h2.d': "Segunda a sexta · 10h – 19h\nFins de semana e feriados · 9h – 22h",
+        'footer.about': 'Hostel e café na Vereda Palestina, Salento, Quindío. Café, montanha e gente boa.',
+        'footer.links': 'Links rápidos', 'footer.follow': 'Siga-nos', 'footer.rights': 'Todos os direitos reservados.',
+      },
+    };
+
+    const IDIOMAS = Object.keys(I18N);
+    const OG_LOCALE = { es: 'es_CO', en: 'en_US', fr: 'fr_FR', de: 'de_DE', pt: 'pt_BR' };
+    let idioma = 'es';
+
+    /**
+     * Devuelve el texto de una clave en el idioma actual; si falta, usa el español.
+     **/
+    function t(clave) {
+      return (I18N[idioma] && I18N[idioma][clave]) || I18N.es[clave] || '';
+    }
+
+    /**
+     * Elige el idioma inicial con la misma lógica de la carta por QR:
+     * 1) ?lang= en la URL, 2) el que el visitante eligió antes, 3) idioma del celular, 4) español.
+     **/
+    function idiomaInicial() {
+      // Parámetro de la URL (útil para compartir el sitio en un idioma concreto).
+      const param = new URLSearchParams(location.search).get('lang');
+      if (param && IDIOMAS.includes(param)) return param;
+      // Preferencia guardada (puede fallar en modo privado, por eso el try).
+      try {
+        const guardado = localStorage.getItem('elregalo-idioma');
+        if (guardado && IDIOMAS.includes(guardado)) return guardado;
+      } catch (e) { /* sin almacenamiento: seguimos con el navegador */ }
+      // Primer idioma del navegador que tengamos traducido.
+      const prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'];
+      for (const p of prefs) {
+        const codigo = String(p).slice(0, 2).toLowerCase();
+        if (IDIOMAS.includes(codigo)) return codigo;
+      }
+      return 'es';
+    }
+
+    /**
+     * Construye el enlace de WhatsApp con el mensaje en el idioma actual.
+     * Si se indica una habitación, el mensaje la menciona.
+     **/
+    function enlaceWhatsApp(habitacion) {
+      const texto = habitacion ? t('wa.room') + habitacion : t('wa.msg');
+      return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
+    }
+
+    /**
+     * Enlace a la carta: abre directo el PDF del idioma elegido si la carta lo tiene;
+     * si no, la página selectora de QR Regalo (que detecta el idioma del celular).
+     **/
+    function enlaceCarta() {
+      return CONFIG.cartaIdiomas.includes(idioma) ? `${CONFIG.carta}${idioma}.pdf` : CONFIG.carta;
+    }
+
+    /**
+     * Actualiza todos los enlaces de contacto a partir de CONFIG y del idioma actual.
+     **/
+    function aplicarEnlaces() {
+      const enlaces = {
+        instagram: `https://instagram.com/${CONFIG.instagram}`,
+        facebook: `https://facebook.com/${CONFIG.facebook}`,
+        carta: enlaceCarta(),
+      };
+      document.querySelectorAll('[data-link]').forEach((a) => {
+        const tipo = a.dataset.link;
+        // WhatsApp se arma por botón (puede llevar el nombre de la habitación).
+        if (tipo === 'whatsapp') a.href = enlaceWhatsApp(a.dataset.room);
+        else if (enlaces[tipo]) a.href = enlaces[tipo];
+      });
+      // Textos visibles que dependen de CONFIG.
+      document.querySelectorAll('[data-text="instagram"]').forEach((el) => { el.textContent = '@' + CONFIG.instagram; });
+      // Un enlace "tel:" por cada número de CONFIG.telefonos.
+      document.getElementById('lista-telefonos').innerHTML = CONFIG.telefonos
+        .map((tel) => `<a href="tel:${escapar(tel.numero)}">${escapar(tel.visible)}</a>`).join('');
+    }
+
+    /** Escapa texto para insertarlo de forma segura dentro de HTML. */
+    function escapar(texto) {
+      return String(texto).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    /**
+     * Dibuja las tarjetas de habitaciones a partir de HABITACIONES en el idioma actual:
+     * carrusel de fotos, tipo, nombre, descripción, capacidad, baño, camas y botón de WhatsApp.
+     **/
+    function renderHabitaciones() {
+      const lista = document.getElementById('lista-habitaciones');
+      lista.innerHTML = '';
+      HABITACIONES.forEach((h) => {
+        // Textos del idioma actual; lo que falte se toma del español.
+        const tx = { ...h.es, ...(h[idioma] || {}) };
+        const nombre = escapar(tx.nombre);
+        const fotos = h.fotos.map((src, i) =>
+          `<img loading="lazy" width="800" height="600" src="${escapar(src)}" alt="${nombre} · ${t('rooms.photo')} ${i + 1} ${t('a11y.of')} ${h.fotos.length}">`).join('');
+        const tarjeta = document.createElement('article');
+        tarjeta.className = 'habitacion card';
+        tarjeta.innerHTML = `
+          <div class="carrusel" data-carrusel>
+            <div class="carrusel-pista" tabindex="0" aria-label="${t('rooms.photos')} ${nombre}">${fotos}</div>
+          </div>
+          <div class="habitacion-cuerpo">
+            <p class="tipo">${escapar(tx.tipo)}</p>
+            <h3>${nombre}</h3>
+            <p>${escapar(tx.descripcion)}</p>
+            <ul class="detalles">
+              <li class="badge"><svg class="icono" aria-hidden="true"><use href="#i-personas"/></svg><span>${t('rooms.cap').replace('{n}', h.personas)}</span></li>
+              <li class="badge"><svg class="icono" aria-hidden="true"><use href="#i-ducha"/></svg><span>${t(h.banoPrivado ? 'rooms.private' : 'rooms.shared')}</span></li>
+              <li class="badge"><svg class="icono" aria-hidden="true"><use href="#i-cama"/></svg><span>${escapar(tx.camas)}</span></li>
+            </ul>
+            <a class="btn btn-primary" data-link="whatsapp" data-room="${nombre}" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">
+              <svg class="icono" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>${t('rooms.ask')}</span>
+            </a>
+          </div>`;
+        lista.appendChild(tarjeta);
+        iniciarCarrusel(tarjeta.querySelector('[data-carrusel]'));
+      });
+    }
+
+    /**
+     * Aplica un idioma a toda la página: textos, atributos (alt, aria-label, title),
+     * metadatos SEO, enlaces y el estado del selector.
+     **/
+    function aplicarIdioma(nuevo) {
+      idioma = IDIOMAS.includes(nuevo) ? nuevo : 'es';
+      document.documentElement.lang = idioma;
+
+      // Textos visibles.
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const texto = t(el.dataset.i18n);
+        if (texto) el.textContent = texto;
+      });
+      // Atributos con formato "atributo:clave; atributo2:clave2".
+      document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+        el.dataset.i18nAttr.split(';').forEach((par) => {
+          const [attr, clave] = par.split(':').map((s) => s.trim());
+          const texto = t(clave);
+          if (attr && texto) el.setAttribute(attr, texto);
+        });
+      });
+
+      // SEO y Open Graph traducidos.
+      document.title = t('meta.title');
+      document.querySelector('meta[name="description"]').content = t('meta.desc');
+      document.querySelector('meta[property="og:title"]').content = t('meta.title');
+      document.querySelector('meta[property="og:locale"]').content = OG_LOCALE[idioma];
+
+      // Selector de idioma: código visible y opción marcada.
+      document.getElementById('idioma-actual').textContent = idioma.toUpperCase();
+      document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-current', String(b.dataset.lang === idioma)));
+
+      renderHabitaciones();
+      aplicarEnlaces();
+      actualizarHamburguesa();
+      document.querySelectorAll('[data-carrusel]').forEach((c) => c._actualizar && c._actualizar());
+
+      // Recordar la elección del visitante.
+      try { localStorage.setItem('elregalo-idioma', idioma); } catch (e) { /* modo privado */ }
+    }
+
+    /* ---------- Selector de idioma ---------- */
+    const idiomaBtn = document.getElementById('idioma-btn');
+    const idiomaMenu = document.getElementById('idioma-menu');
+
+    /** Abre o cierra el menú de idiomas. */
+    function toggleIdiomas(abrir) {
+      idiomaMenu.hidden = !abrir;
+      idiomaBtn.setAttribute('aria-expanded', String(abrir));
+    }
+    idiomaBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleIdiomas(idiomaMenu.hidden); });
+    idiomaMenu.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-lang]');
+      if (!b) return;
+      aplicarIdioma(b.dataset.lang);
+      toggleIdiomas(false);
+      idiomaBtn.focus();
+    });
+    // Cerrar al hacer clic fuera o con Escape.
+    document.addEventListener('click', (e) => { if (!e.target.closest('.idioma')) toggleIdiomas(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !idiomaMenu.hidden) { toggleIdiomas(false); idiomaBtn.focus(); } });
+
+    /* ---------- Navegación fija y menú hamburguesa ---------- */
+    const nav = document.getElementById('nav');
+    const hamburguesa = document.getElementById('hamburguesa');
+    const menuMovil = document.getElementById('menu-movil');
+
+    /** Mantiene el aria-label del botón hamburguesa según su estado e idioma. */
+    function actualizarHamburguesa() {
+      const abierto = hamburguesa.getAttribute('aria-expanded') === 'true';
+      hamburguesa.setAttribute('aria-label', t(abierto ? 'a11y.menuClose' : 'a11y.menu'));
+    }
+    /** Abre o cierra el menú móvil (la barra se vuelve sólida mientras está abierto). */
+    function toggleMenu(abrir) {
+      hamburguesa.setAttribute('aria-expanded', String(abrir));
+      menuMovil.classList.toggle('abierto', abrir);
+      actualizarHamburguesa();
+      actualizarNav();
+    }
+    hamburguesa.addEventListener('click', () => toggleMenu(hamburguesa.getAttribute('aria-expanded') !== 'true'));
+    // Al elegir una sección, cerrar el menú.
+    menuMovil.addEventListener('click', (e) => { if (e.target.closest('a')) toggleMenu(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuMovil.classList.contains('abierto')) { toggleMenu(false); hamburguesa.focus(); } });
+
+    /** Barra transparente sobre el hero y crema al bajar (o con el menú abierto). */
+    function actualizarNav() {
+      const abierto = menuMovil.classList.contains('abierto');
+      nav.classList.toggle('solida', abierto || window.scrollY > window.innerHeight * 0.6);
+    }
+    window.addEventListener('scroll', actualizarNav, { passive: true });
+
+    // Resaltar en el menú la sección que se está viendo.
+    const enlacesNav = document.querySelectorAll('.nav-enlaces a');
+    const observadorSecciones = new IntersectionObserver((entradas) => {
+      entradas.forEach((en) => {
+        if (!en.isIntersecting) return;
+        enlacesNav.forEach((a) => a.classList.toggle('activo', a.getAttribute('href') === '#' + en.target.id));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('main section[id]').forEach((s) => observadorSecciones.observe(s));
+
+    /* ---------- Carruseles de habitaciones ---------- */
+    /**
+     * Convierte un [data-carrusel] en un carrusel con scroll-snap (deslizar en móvil),
+     * flechas y puntos. Lo llama renderHabitaciones() para cada tarjeta.
+     **/
+    function iniciarCarrusel(carrusel) {
+      const pista = carrusel.querySelector('.carrusel-pista');
+      const fotos = [...pista.querySelectorAll('img')];
+      // Con una sola foto no hacen falta flechas ni puntos.
+      if (fotos.length < 2) return;
+
+      // Flechas anterior / siguiente.
+      const crearFlecha = (clase, icono, paso) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'carrusel-flecha ' + clase;
+        b.innerHTML = `<svg class="icono" aria-hidden="true"><use href="#${icono}"/></svg>`;
+        b.addEventListener('click', () => irA(indiceActual() + paso));
+        carrusel.appendChild(b);
+        return b;
+      };
+      const prev = crearFlecha('prev', 'i-flecha-izq', -1);
+      const next = crearFlecha('next', 'i-flecha-der', 1);
+
+      // Un punto por foto.
+      const puntos = document.createElement('div');
+      puntos.className = 'puntos';
+      fotos.forEach((_, i) => {
+        const p = document.createElement('button');
+        p.type = 'button';
+        p.addEventListener('click', () => irA(i));
+        puntos.appendChild(p);
+      });
+      carrusel.appendChild(puntos);
+
+      const indiceActual = () => Math.round(pista.scrollLeft / pista.clientWidth);
+      const irA = (i) => pista.scrollTo({ left: Math.max(0, Math.min(fotos.length - 1, i)) * pista.clientWidth });
+
+      /** Refresca flechas, puntos y etiquetas accesibles según la foto visible. */
+      carrusel._actualizar = () => {
+        const i = indiceActual();
+        prev.disabled = i === 0;
+        next.disabled = i === fotos.length - 1;
+        prev.setAttribute('aria-label', t('a11y.prev'));
+        next.setAttribute('aria-label', t('a11y.next'));
+        [...puntos.children].forEach((p, j) => {
+          p.setAttribute('aria-current', String(j === i));
+          p.setAttribute('aria-label', `${t('a11y.slide')} ${j + 1} ${t('a11y.of')} ${fotos.length}`);
+        });
+      };
+      pista.addEventListener('scroll', () => requestAnimationFrame(carrusel._actualizar), { passive: true });
+      // Flechas del teclado cuando la pista tiene el foco.
+      pista.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); irA(indiceActual() + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); irA(indiceActual() - 1); }
+      });
+      carrusel._actualizar();
+    }
+
+    /* ---------- Galería con lightbox ---------- */
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const lbTexto = document.getElementById('lb-texto');
+    const lbContador = document.getElementById('lb-contador');
+    const itemsGaleria = [...document.querySelectorAll('#galeria-grid button')];
+    let lbIndice = 0;
+    let lbOrigen = null;
+
+    /** Muestra en el lightbox la foto i (en bucle) con su descripción. */
+    function mostrarFoto(i) {
+      lbIndice = (i + itemsGaleria.length) % itemsGaleria.length;
+      const item = itemsGaleria[lbIndice];
+      const mini = item.querySelector('img');
+      lbImg.src = item.dataset.full;
+      lbImg.alt = mini.alt;
+      lbTexto.textContent = mini.alt;
+      lbContador.textContent = `${lbIndice + 1} / ${itemsGaleria.length}`;
+      // Precargar la siguiente para que el cambio sea instantáneo.
+      new Image().src = itemsGaleria[(lbIndice + 1) % itemsGaleria.length].dataset.full;
+    }
+    itemsGaleria.forEach((item, i) => {
+      // Nombre accesible del botón = descripción de la foto.
+      item.addEventListener('click', () => { lbOrigen = item; mostrarFoto(i); lightbox.showModal(); document.body.style.overflow = 'hidden'; });
+    });
+    document.getElementById('lb-prev').addEventListener('click', () => mostrarFoto(lbIndice - 1));
+    document.getElementById('lb-next').addEventListener('click', () => mostrarFoto(lbIndice + 1));
+    document.getElementById('lb-cerrar').addEventListener('click', () => lightbox.close());
+    // Al cerrar, devolver el scroll y el foco a la miniatura.
+    lightbox.addEventListener('close', () => { document.body.style.overflow = ''; lbOrigen && lbOrigen.focus(); });
+    // Clic en el fondo oscuro cierra.
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox || e.target.tagName === 'FIGURE') lightbox.close(); });
+    // Flechas del teclado.
+    lightbox.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') mostrarFoto(lbIndice - 1);
+      if (e.key === 'ArrowRight') mostrarFoto(lbIndice + 1);
+    });
+    // Deslizar con el dedo en móvil.
+    let toqueX = null;
+    lightbox.addEventListener('touchstart', (e) => { toqueX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', (e) => {
+      if (toqueX === null) return;
+      const dx = e.changedTouches[0].clientX - toqueX;
+      if (Math.abs(dx) > 50) mostrarFoto(lbIndice + (dx < 0 ? 1 : -1));
+      toqueX = null;
+    });
+
+    /* ---------- Aparición suave al hacer scroll ---------- */
+    const reveladores = document.querySelectorAll('.revelar');
+    if ('IntersectionObserver' in window) {
+      const observador = new IntersectionObserver((entradas) => {
+        entradas.forEach((en) => {
+          if (en.isIntersecting) { en.target.classList.add('visible'); observador.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveladores.forEach((el) => observador.observe(el));
+    } else {
+      reveladores.forEach((el) => el.classList.add('visible'));
+    }
+
+    /* ---------- Inicio ---------- */
+    document.getElementById('anio').textContent = new Date().getFullYear();
+    aplicarIdioma(idiomaInicial());
+    actualizarNav();
+  </script>
+</body>
+</html>

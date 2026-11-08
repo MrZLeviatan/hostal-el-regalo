@@ -1,0 +1,59 @@
+# /**
+#  * Despliegue continuo de la landing de El Regalo en GitHub Pages (gratis, siempre activa).
+#  * Cada push a la rama main ejecuta dos trabajos:
+#  *  1. verificar: revisa rutas de archivos, SEO básico y sintaxis del JavaScript.
+#  *  2. desplegar: solo si la verificación pasa, publica index.html e img/ en Pages.
+#  * Si la verificación falla, la página publicada sigue siendo la versión anterior.
+#  * También se puede lanzar a mano desde la pestaña Actions (workflow_dispatch).
+#  **/
+name: Desplegar landing
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permisos mínimos: leer el código y publicar en Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si llegan dos push seguidos, solo se despliega el último.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Node para revisar la sintaxis del JavaScript del index.html.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verificar la página
+        run: python3 scripts/verificar.py
+
+  desplegar:
+    needs: verificar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # Solo se publica lo que ve el visitante (sin scripts ni configuración).
+      - name: Preparar el sitio
+        run: |
+          mkdir _site
+          cp -r index.html img _site/
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publicar en GitHub Pages
+        id: despliegue
+        uses: actions/deploy-pages@v4
