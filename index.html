@@ -3,7 +3,7 @@
   /**
    * Landing page de El Regalo · Hostal & Cafetería (Vereda Palestina, Salento, Quindío).
    * Sitio informativo de una sola página: sin base de datos, sin login y sin reservas.
-   * Lleva al visitante a escribir por WhatsApp, Instagram, Facebook o teléfono y a ver
+   * Lleva al visitante a escribir por WhatsApp, Instagram o teléfono, a Booking y a ver
    * la carta publicada por QR Regalo. Se muestra en 5 idiomas (ES, EN, FR, DE, PT) con
    * detección automática del idioma del celular, igual que la carta por QR.
    *
@@ -379,7 +379,7 @@
     .contacto small { display: block; font-size: .875rem; opacity: .9; overflow-wrap: anywhere; }
     .c-whatsapp { background: var(--whatsapp-oscuro); }
     .c-instagram { background: linear-gradient(135deg, #7a2bc2, #c1356b 55%, #d9762b); }
-    .c-facebook { background: #1765d4; }
+    .c-booking { background: #003580; }
     .c-telefono { background: var(--verde-oscuro); }
     .c-carta { background: var(--cafe); }
     .horarios { display: grid; gap: 1rem; margin-top: 2rem; }
@@ -435,7 +435,6 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></symbol>
-    <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
     <symbol id="i-telefono" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
     <symbol id="i-carta" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
     <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
@@ -730,8 +729,8 @@
           <a class="contacto c-instagram revelar" style="--retraso:.05s" data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">
             <svg class="icono" aria-hidden="true"><use href="#i-instagram"/></svg><span><strong>Instagram</strong><small data-text="instagram">@hostal_elregalo</small></span>
           </a>
-          <a class="contacto c-facebook revelar" style="--retraso:.1s" data-link="facebook" href="https://facebook.com/elregalo.salento" target="_blank" rel="noopener">
-            <svg class="icono" aria-hidden="true"><use href="#i-facebook"/></svg><span><strong>Facebook</strong><small data-i18n="contact.fb">Fotos y novedades</small></span>
+          <a class="contacto c-booking revelar" style="--retraso:.1s" data-link="booking" href="https://www.booking.com/hotel/co/hostal-el-regalo.es.html" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-cama"/></svg><span><strong>Booking</strong><small data-i18n="contact.booking">Reserva en línea</small></span>
           </a>
           <!-- Teléfonos: se llenan desde CONFIG.telefonos (puedes poner uno o varios). -->
           <div class="contacto c-telefono revelar" style="--retraso:.15s">
@@ -778,7 +777,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
           <ul>
             <li><a data-link="whatsapp" href="https://wa.me/573106239868" target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a data-link="facebook" href="https://facebook.com/elregalo.salento" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a data-link="booking" href="https://www.booking.com/hotel/co/hostal-el-regalo.es.html" target="_blank" rel="noopener">Booking</a></li>
             <li><a data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener" data-i18n="menu.cta">Ver carta</a></li>
           </ul>
         </div>
@@ -812,8 +811,9 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
       ],
       // Usuario de Instagram, sin @.
       instagram: 'hostal_elregalo',
-      // Página de Facebook (lo que va después de facebook.com/).
-      facebook: 'elregalo.salento',
+      // Página del hostal en Booking (sin el idioma ni ".html") y código de Booking para cada idioma.
+      booking: 'https://www.booking.com/hotel/co/hostal-el-regalo',
+      bookingIdiomas: { es: 'es', en: 'en-gb', fr: 'fr', de: 'de', pt: 'pt-br' },
       // Carta publicada por QR Regalo (GitHub Pages). Abre el PDF en el idioma elegido aquí.
       carta: 'https://mrzleviatan.github.io/carta-el-regalo/',
       // Idiomas en los que está publicada la carta (los mismos activos en QR Regalo).
@@ -946,7 +946,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         'location.cta': 'Abrir en Google Maps',
         'contact.kicker': 'Contacto', 'contact.title': '¿Hablamos?',
         'contact.intro': 'Pregúntanos por disponibilidad, tarifas, planes o cómo llegar. Respondemos en español e inglés.',
-        'contact.wa': 'La forma más rápida', 'contact.fb': 'Fotos y novedades', 'contact.phone': 'Llámanos', 'contact.menu': 'En 5 idiomas',
+        'contact.wa': 'La forma más rápida', 'contact.booking': 'Reserva en línea', 'contact.phone': 'Llámanos', 'contact.menu': 'En 5 idiomas',
         'contact.h1.t': 'Recepción', 'contact.h1.d': 'Todos los días · 7:00 a. m. – 9:00 p. m. Check-in desde las 2:00 p. m.; check-out hasta las 11:00 a. m.',
         'contact.h2.t': 'Cafetería', 'contact.h2.d': "Lunes a viernes · 10:00 a. m. – 7:00 p. m.\nFines de semana y festivos · 9:00 a. m. – 10:00 p. m.",
         'footer.about': 'Hostal y cafetería en la Vereda Palestina, Salento, Quindío. Café, montaña y buena gente.',
@@ -1013,7 +1013,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         'location.cta': 'Open in Google Maps',
         'contact.kicker': 'Contact', 'contact.title': "Let's talk",
         'contact.intro': 'Ask us about availability, rates, activities or how to get here. We reply in Spanish and English.',
-        'contact.wa': 'The fastest way', 'contact.fb': 'Photos and news', 'contact.phone': 'Call us', 'contact.menu': 'In 5 languages',
+        'contact.wa': 'The fastest way', 'contact.booking': 'Book online', 'contact.phone': 'Call us', 'contact.menu': 'In 5 languages',
         'contact.h1.t': 'Reception', 'contact.h1.d': 'Every day · 7:00 a.m. – 9:00 p.m. Check-in from 2:00 p.m.; check-out until 11:00 a.m.',
         'contact.h2.t': 'Café', 'contact.h2.d': "Monday to Friday · 10:00 a.m. – 7:00 p.m.\nWeekends and holidays · 9:00 a.m. – 10:00 p.m.",
         'footer.about': 'Hostel and café in Vereda Palestina, Salento, Quindío. Coffee, mountains and good people.',
@@ -1080,7 +1080,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         'location.cta': 'Ouvrir dans Google Maps',
         'contact.kicker': 'Contact', 'contact.title': 'On en parle ?',
         'contact.intro': 'Demandez-nous les disponibilités, les tarifs, les activités ou l’itinéraire. Nous répondons en espagnol et en anglais.',
-        'contact.wa': 'Le plus rapide', 'contact.fb': 'Photos et actualités', 'contact.phone': 'Appelez-nous', 'contact.menu': 'En 5 langues',
+        'contact.wa': 'Le plus rapide', 'contact.booking': 'Réserver en ligne', 'contact.phone': 'Appelez-nous', 'contact.menu': 'En 5 langues',
         'contact.h1.t': 'Réception', 'contact.h1.d': 'Tous les jours · 7 h – 21 h. Arrivée dès 14 h ; départ jusqu’à 11 h.',
         'contact.h2.t': 'Café', 'contact.h2.d': "Du lundi au vendredi · 10 h – 19 h\nWeek-ends et jours fériés · 9 h – 22 h",
         'footer.about': 'Auberge et café à Vereda Palestina, Salento, Quindío. Café, montagnes et bonne compagnie.',
@@ -1147,7 +1147,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         'location.cta': 'In Google Maps öffnen',
         'contact.kicker': 'Kontakt', 'contact.title': 'Lass uns reden',
         'contact.intro': 'Frag uns nach Verfügbarkeit, Preisen, Ausflügen oder der Anreise. Wir antworten auf Spanisch und Englisch.',
-        'contact.wa': 'Der schnellste Weg', 'contact.fb': 'Fotos und News', 'contact.phone': 'Ruf uns an', 'contact.menu': 'In 5 Sprachen',
+        'contact.wa': 'Der schnellste Weg', 'contact.booking': 'Online buchen', 'contact.phone': 'Ruf uns an', 'contact.menu': 'In 5 Sprachen',
         'contact.h1.t': 'Rezeption', 'contact.h1.d': 'Täglich · 7:00 – 21:00 Uhr. Check-in ab 14:00 Uhr; Check-out bis 11:00 Uhr.',
         'contact.h2.t': 'Café', 'contact.h2.d': "Montag bis Freitag · 10:00 – 19:00 Uhr\nWochenende und Feiertage · 9:00 – 22:00 Uhr",
         'footer.about': 'Hostel und Café in der Vereda Palestina, Salento, Quindío. Kaffee, Berge und gute Leute.',
@@ -1214,7 +1214,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         'location.cta': 'Abrir no Google Maps',
         'contact.kicker': 'Contato', 'contact.title': 'Vamos conversar?',
         'contact.intro': 'Pergunte sobre disponibilidade, tarifas, passeios ou como chegar. Respondemos em espanhol e inglês.',
-        'contact.wa': 'O jeito mais rápido', 'contact.fb': 'Fotos e novidades', 'contact.phone': 'Ligue para nós', 'contact.menu': 'Em 5 idiomas',
+        'contact.wa': 'O jeito mais rápido', 'contact.booking': 'Reserve online', 'contact.phone': 'Ligue para nós', 'contact.menu': 'Em 5 idiomas',
         'contact.h1.t': 'Recepção', 'contact.h1.d': 'Todos os dias · 7h – 21h. Check-in a partir das 14h; check-out até as 11h.',
         'contact.h2.t': 'Café', 'contact.h2.d': "Segunda a sexta · 10h – 19h\nFins de semana e feriados · 9h – 22h",
         'footer.about': 'Hostel e café na Vereda Palestina, Salento, Quindío. Café, montanha e gente boa.',
@@ -1278,7 +1278,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
     function aplicarEnlaces() {
       const enlaces = {
         instagram: `https://instagram.com/${CONFIG.instagram}`,
-        facebook: `https://facebook.com/${CONFIG.facebook}`,
+        booking: `${CONFIG.booking}.${CONFIG.bookingIdiomas[idioma]}.html`,
         carta: enlaceCarta(),
       };
       document.querySelectorAll('[data-link]').forEach((a) => {
