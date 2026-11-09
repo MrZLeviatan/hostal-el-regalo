@@ -367,7 +367,7 @@
        ========================================================== */
     .contactos { display: grid; gap: .75rem; }
     @media (min-width: 640px) { .contactos { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1040px) { .contactos { grid-template-columns: repeat(5, 1fr); } }
+    @media (min-width: 1040px) { .contactos { grid-template-columns: repeat(3, 1fr); } }
     .contacto {
       display: flex; align-items: center; gap: 1rem; padding: 1.125rem 1.25rem; border-radius: 1rem; color: #fff; text-decoration: none;
       transition: transform .2s, box-shadow .2s, filter .2s;
@@ -380,6 +380,7 @@
     .c-whatsapp { background: var(--whatsapp-oscuro); }
     .c-instagram { background: linear-gradient(135deg, #7a2bc2, #c1356b 55%, #d9762b); }
     .c-booking { background: #003580; }
+    .c-airbnb { background: #c81e45; }  /* rosa Airbnb oscurecido para contraste AA con texto blanco */
     .c-telefono { background: var(--verde-oscuro); }
     .c-carta { background: var(--cafe); }
     .horarios { display: grid; gap: 1rem; margin-top: 2rem; }
@@ -449,6 +450,7 @@
     <symbol id="i-hoja" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
     <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
     <symbol id="i-ampliar" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></symbol>
+    <symbol id="i-casa" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
     <symbol id="i-flecha-izq" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
     <symbol id="i-flecha-der" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
     <symbol id="i-abajo" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
@@ -729,14 +731,17 @@
           <a class="contacto c-instagram revelar" style="--retraso:.05s" data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">
             <svg class="icono" aria-hidden="true"><use href="#i-instagram"/></svg><span><strong>Instagram</strong><small data-text="instagram">@hostal_elregalo</small></span>
           </a>
-          <a class="contacto c-booking revelar" style="--retraso:.1s" data-link="booking" href="https://www.booking.com/hotel/co/hostal-el-regalo.es.html" target="_blank" rel="noopener">
-            <svg class="icono" aria-hidden="true"><use href="#i-cama"/></svg><span><strong>Booking</strong><small data-i18n="contact.booking">Reserva en línea</small></span>
-          </a>
           <!-- Teléfonos: se llenan desde CONFIG.telefonos (puedes poner uno o varios). -->
           <div class="contacto c-telefono revelar" style="--retraso:.15s">
             <svg class="icono" aria-hidden="true"><use href="#i-telefono"/></svg><span><strong data-i18n="contact.phone">Llámanos</strong>
               <span class="telefonos" id="lista-telefonos"><a href="tel:+573106239868">310 623 9868</a><a href="tel:+573002607201">300 260 7201</a><a href="tel:+573148613948">314 861 3948</a></span></span>
           </div>
+          <a class="contacto c-booking revelar" style="--retraso:.1s" data-link="booking" href="https://www.booking.com/hotel/co/hostal-el-regalo.es.html" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-cama"/></svg><span><strong>Booking</strong><small data-i18n="contact.booking">Reserva en línea</small></span>
+          </a>
+          <a class="contacto c-airbnb revelar" style="--retraso:.1s" data-link="airbnb" href="https://www.airbnb.com.co/h/hostelcafeteriaelregalo" target="_blank" rel="noopener">
+            <svg class="icono" aria-hidden="true"><use href="#i-casa"/></svg><span><strong>Airbnb</strong><small data-i18n="contact.booking">Reserva en línea</small></span>
+          </a>
           <a class="contacto c-carta revelar" style="--retraso:.2s" data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener">
             <svg class="icono" aria-hidden="true"><use href="#i-carta"/></svg><span><strong data-i18n="menu.cta">Ver carta</strong><small data-i18n="contact.menu">En 5 idiomas</small></span>
           </a>
@@ -778,6 +783,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
             <li><a data-link="whatsapp" href="https://wa.me/573106239868" target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a data-link="instagram" href="https://www.instagram.com/hostal_elregalo/" target="_blank" rel="noopener">Instagram</a></li>
             <li><a data-link="booking" href="https://www.booking.com/hotel/co/hostal-el-regalo.es.html" target="_blank" rel="noopener">Booking</a></li>
+            <li><a data-link="airbnb" href="https://www.airbnb.com.co/h/hostelcafeteriaelregalo" target="_blank" rel="noopener">Airbnb</a></li>
             <li><a data-link="carta" href="https://mrzleviatan.github.io/carta-el-regalo/" target="_blank" rel="noopener" data-i18n="menu.cta">Ver carta</a></li>
           </ul>
         </div>
@@ -815,6 +821,8 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
       // Página del hostal en Booking (sin el idioma ni ".html") y código de Booking para cada idioma.
       booking: 'https://www.booking.com/hotel/co/hostal-el-regalo',
       bookingIdiomas: { es: 'es', en: 'en-gb', fr: 'fr', de: 'de', pt: 'pt-br' },
+      // Página del hostal en Airbnb.
+      airbnb: 'https://www.airbnb.com.co/h/hostelcafeteriaelregalo',
       // Carta publicada por QR Regalo (GitHub Pages). Abre el PDF en el idioma elegido aquí.
       carta: 'https://mrzleviatan.github.io/carta-el-regalo/',
       // Idiomas en los que está publicada la carta (los mismos activos en QR Regalo).
@@ -1280,6 +1288,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
       const enlaces = {
         instagram: `https://instagram.com/${CONFIG.instagram}`,
         booking: `${CONFIG.booking}.${CONFIG.bookingIdiomas[idioma]}.html`,
+        airbnb: CONFIG.airbnb,
         carta: enlaceCarta(),
       };
       document.querySelectorAll('[data-link]').forEach((a) => {

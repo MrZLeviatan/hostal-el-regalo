@@ -25,7 +25,7 @@ Para revisar antes de subir: `python3 scripts/verificar.py` y
 
 | Qué | Dónde |
 |---|---|
-| WhatsApp, teléfonos, Instagram, Booking, carta | objeto `CONFIG` del `<script>` |
+| WhatsApp, teléfonos, Instagram, Booking, Airbnb, carta | objeto `CONFIG` del `<script>` |
 | Habitaciones (fotos, capacidad, baño, textos por idioma) | lista `HABITACIONES` |
 | Textos de la página en cada idioma | diccionario `I18N` |
 | Colores | variables en `:root` |
