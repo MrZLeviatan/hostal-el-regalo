@@ -266,7 +266,11 @@
     .carrusel { position: relative; background: var(--verde-oscuro); }
     .carrusel-pista { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
     .carrusel-pista::-webkit-scrollbar { display: none; }
-    .carrusel-pista img { flex: 0 0 100%; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; scroll-snap-align: start; }
+    .carrusel-foto { flex: 0 0 100%; display: block; padding: 0; border: 0; background: none; cursor: zoom-in; scroll-snap-align: start; }
+    .carrusel-foto img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+    /* Indicador de que la foto se puede ampliar (el clic lo recibe la foto). */
+    .carrusel-ampliar { position: absolute; top: .625rem; right: .625rem; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 999px; background: rgb(0 0 0 / .5); color: #fff; pointer-events: none; }
+    .carrusel-ampliar .icono { width: 1.125rem; height: 1.125rem; }
     .carrusel-flecha {
       position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
       border: 0; border-radius: 999px; background: rgb(255 255 255 / .9); color: var(--tinta); cursor: pointer;
@@ -445,6 +449,7 @@
     <symbol id="i-ducha" viewBox="0 0 24 24"><path d="M4 4 2.5 2.5"/><path d="M13.5 6.5a4.95 4.95 0 0 0-7 7"/><path d="M15 5 5 15"/><path d="M14 17v.01"/><path d="M10 16v.01"/><path d="M13 13v.01"/><path d="M16 10v.01"/><path d="M11 20v.01"/><path d="M17 14v.01"/><path d="M20 11v.01"/></symbol>
     <symbol id="i-hoja" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
     <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-ampliar" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></symbol>
     <symbol id="i-flecha-izq" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
     <symbol id="i-flecha-der" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
     <symbol id="i-abajo" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
@@ -819,8 +824,9 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
        HABITACIONES — AQUÍ SE CONFIGURAN TODAS
        Cada { … } es una tarjeta, en el orden en que aparecen. Para agregar
        una habitación copia un bloque completo; para quitarla, bórralo.
-       - fotos: rutas de las fotos (WebP 800×600, 4:3) en img/habitaciones/.
-                El carrusel muestra tantas como pongas (1 o más).
+       - fotos: rutas de las fotos (WebP completas, hasta 1600 px de lado) en
+                img/habitaciones/. La tarjeta las recorta a 4:3 y al tocarlas
+                se abren enteras. Puedes poner tantas como quieras (1 o más).
        - personas: capacidad máxima (número).
        - banoPrivado: true = "Baño privado", false = "Baño compartido".
        - es / en / fr / de / pt: textos en cada idioma. Si falta un idioma
@@ -1305,12 +1311,13 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
         const tx = { ...h.es, ...(h[idioma] || {}) };
         const nombre = escapar(tx.nombre);
         const fotos = h.fotos.map((src, i) =>
-          `<img loading="lazy" width="800" height="600" src="${escapar(src)}" alt="${nombre} · ${t('rooms.photo')} ${i + 1} ${t('a11y.of')} ${h.fotos.length}">`).join('');
+          `<button type="button" class="carrusel-foto"><img loading="lazy" width="800" height="600" src="${escapar(src)}" alt="${nombre} · ${t('rooms.photo')} ${i + 1} ${t('a11y.of')} ${h.fotos.length}"></button>`).join('');
         const tarjeta = document.createElement('article');
         tarjeta.className = 'habitacion card';
         tarjeta.innerHTML = `
           <div class="carrusel" data-carrusel>
             <div class="carrusel-pista" tabindex="0" aria-label="${t('rooms.photos')} ${nombre}">${fotos}</div>
+            <span class="carrusel-ampliar" aria-hidden="true"><svg class="icono"><use href="#i-ampliar"/></svg></span>
           </div>
           <div class="habitacion-cuerpo">
             <p class="tipo">${escapar(tx.tipo)}</p>
@@ -1495,28 +1502,53 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
     const lbImg = document.getElementById('lb-img');
     const lbTexto = document.getElementById('lb-texto');
     const lbContador = document.getElementById('lb-contador');
+    const lbPrev = document.getElementById('lb-prev');
+    const lbNext = document.getElementById('lb-next');
     const itemsGaleria = [...document.querySelectorAll('#galeria-grid button')];
+    let lbFotos = [];
     let lbIndice = 0;
     let lbOrigen = null;
 
-    /** Muestra en el lightbox la foto i (en bucle) con su descripción. */
+    /** Muestra en el lightbox la foto i (en bucle) de la lista abierta, con su descripción. */
     function mostrarFoto(i) {
-      lbIndice = (i + itemsGaleria.length) % itemsGaleria.length;
-      const item = itemsGaleria[lbIndice];
-      const mini = item.querySelector('img');
-      lbImg.src = item.dataset.full;
-      lbImg.alt = mini.alt;
-      lbTexto.textContent = mini.alt;
-      lbContador.textContent = `${lbIndice + 1} / ${itemsGaleria.length}`;
+      lbIndice = (i + lbFotos.length) % lbFotos.length;
+      const foto = lbFotos[lbIndice];
+      lbImg.src = foto.src;
+      lbImg.alt = foto.alt;
+      lbTexto.textContent = foto.alt;
+      lbContador.textContent = `${lbIndice + 1} / ${lbFotos.length}`;
       // Precargar la siguiente para que el cambio sea instantáneo.
-      new Image().src = itemsGaleria[(lbIndice + 1) % itemsGaleria.length].dataset.full;
+      new Image().src = lbFotos[(lbIndice + 1) % lbFotos.length].src;
     }
+
+    /** Abre el lightbox con una lista de fotos { src, alt }, empezando en la foto i. */
+    function abrirLightbox(fotos, i, origen) {
+      lbFotos = fotos;
+      lbOrigen = origen;
+      // Con una sola foto no hay nada que recorrer.
+      lbPrev.hidden = lbNext.hidden = fotos.length < 2;
+      mostrarFoto(i);
+      lightbox.showModal();
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Galería: la foto grande está en data-full; el texto se lee al abrir por si cambió el idioma.
     itemsGaleria.forEach((item, i) => {
-      // Nombre accesible del botón = descripción de la foto.
-      item.addEventListener('click', () => { lbOrigen = item; mostrarFoto(i); lightbox.showModal(); document.body.style.overflow = 'hidden'; });
+      item.addEventListener('click', () => {
+        const fotos = itemsGaleria.map((b) => ({ src: b.dataset.full, alt: b.querySelector('img').alt }));
+        abrirLightbox(fotos, i, item);
+      });
     });
-    document.getElementById('lb-prev').addEventListener('click', () => mostrarFoto(lbIndice - 1));
-    document.getElementById('lb-next').addEventListener('click', () => mostrarFoto(lbIndice + 1));
+    // Habitaciones: un solo oyente porque las tarjetas se redibujan al cambiar de idioma.
+    document.getElementById('lista-habitaciones').addEventListener('click', (e) => {
+      const boton = e.target.closest('.carrusel-foto');
+      if (!boton) return;
+      const botones = [...boton.parentElement.querySelectorAll('.carrusel-foto')];
+      const fotos = botones.map((b) => { const img = b.querySelector('img'); return { src: img.getAttribute('src'), alt: img.alt }; });
+      abrirLightbox(fotos, botones.indexOf(boton), boton);
+    });
+    lbPrev.addEventListener('click', () => mostrarFoto(lbIndice - 1));
+    lbNext.addEventListener('click', () => mostrarFoto(lbIndice + 1));
     document.getElementById('lb-cerrar').addEventListener('click', () => lightbox.close());
     // Al cerrar, devolver el scroll y el foco a la miniatura.
     lightbox.addEventListener('close', () => { document.body.style.overflow = ''; lbOrigen && lbOrigen.focus(); });
@@ -1533,7 +1565,7 @@ Fines de semana y festivos · 9:00 a. m. – 10:00 p. m.</p></div>
     lightbox.addEventListener('touchend', (e) => {
       if (toqueX === null) return;
       const dx = e.changedTouches[0].clientX - toqueX;
-      if (Math.abs(dx) > 50) mostrarFoto(lbIndice + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 50 && lbFotos.length > 1) mostrarFoto(lbIndice + (dx < 0 ? 1 : -1));
       toqueX = null;
     });
 
